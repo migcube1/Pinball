@@ -50,11 +50,14 @@ Texture dirtTexture;
 Texture plainTexture;
 Texture dadoTexture;
 Texture Tagave;
+
 //materiales
 Material Material_brillante;
 Material Material_opaco;
+
 //luz direccional
 DirectionalLight mainLight;
+
 //para declarar varias luces de tipo pointlight
 PointLight pointLights[MAX_POINT_LIGHTS];
 SpotLight spotLights[MAX_SPOT_LIGHTS];
