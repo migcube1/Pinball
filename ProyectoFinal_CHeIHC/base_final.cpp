@@ -50,6 +50,7 @@ Texture dirtTexture;
 Texture plainTexture;
 Texture dadoTexture;
 Texture Tagave;
+Texture Portada;
 
 //materiales
 Material Material_brillante;
@@ -117,10 +118,10 @@ void CreateObjects()
 
 	GLfloat floorVertices[] = {
 		//	x      y      z			u	  v			nx	  ny    nz
-		-1.0f, 0.0f,  1.0f,		0.0f,  1.0f,	0.0f, -1.0f, 0.0f,
-		-1.0f, 0.0f, -1.0f,		0.0f,  0.0f,	0.0f, -1.0f, 0.0f,
-		 1.0f, 0.0f, -1.0f,		1.0f,  0.0f,	0.0f, -1.0f, 0.0f,
-		 1.0f, 0.0f,  1.0f,		1.0f,  1.0f,	0.0f, -1.0f, 0.0f
+		-1.0f, 0.0f,  1.0f,		0.0f,  0.0f,	0.0f, -1.0f, 0.0f,
+		-1.0f, 0.0f, -1.0f,		0.0f,  1.0f,	0.0f, -1.0f, 0.0f,
+		 1.0f, 0.0f, -1.0f,		1.0f,  1.0f,	0.0f, -1.0f, 0.0f,
+		 1.0f, 0.0f,  1.0f,		1.0f,  0.0f,	0.0f, -1.0f, 0.0f
 	};
 
 	///calcAverageNormals(indices, 12, vertices, 32, 8, 5);
@@ -234,6 +235,9 @@ int main()
 	dadoTexture.LoadTextureA();
 	Tagave = Texture("Textures/Agave.tga");
 	Tagave.LoadTextureA();
+	Portada = Texture("Textures/portadaJuego.png");
+	Portada.LoadTextureA();
+
 	Material_brillante = Material(4.0f, 256);
 	Material_opaco = Material(0.3f, 4);
 
@@ -257,7 +261,7 @@ int main()
 
 	//luz direccional, sólo 1 y siempre debe de existir
 	mainLight = DirectionalLight(1.0f, 1.0f, 1.0f, 
-								0.3f, 0.3f,
+								0.5f, 0.5f,
 								0.0f, 0.0f, -1.0f);
 	//contador de luces puntuales
 	unsigned int pointLightCount = 0;
@@ -377,7 +381,7 @@ int main()
 		model = glm::scale(model, glm::vec3(15.0f, 1.0f, 20.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		//pisoTexture.UseTexture();
-		plainTexture.UseTexture();
+		Portada.UseTexture();
 		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		meshList[0]->RenderMesh();
 		
