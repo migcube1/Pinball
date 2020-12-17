@@ -2,15 +2,11 @@
 	UNIVERSIDAD NACIONAL AUTÓNOMA DE MÉXICO
 	FACULTAD DE INGENIERÍA
 	LABORATORIO DE COMPUTACIÓN GRÁFICA E INTERACCIÓN HUMANO-COMPUTADORA
-
 	PROYECTO FINAL "PINBALL"
-
 	SEMESTRE 2021-1
-
 	ALUMNOS: 
 	 - LEYVA BEJARANO MIGUEL ANGEL
 	 - VELASCO ARCINIEGA ERNESTO
-
 */
 //para cargar imagen
 #define STB_IMAGE_IMPLEMENTATION
@@ -58,6 +54,8 @@ Camera camera;
 // Delaración de las Texturas
 Texture plainTexture;
 Texture Portada;
+Texture Isaac;
+Texture Necromorph;
 
 //Declaración de materiales
 Material Material_brillante;
@@ -211,6 +209,257 @@ void CrearCubo()
 
 }
 
+void CrearPersonajes()
+{
+	unsigned int cubos_indices[] = {
+		// front
+		0, 1, 2,
+		2, 3, 0,
+		// right
+		4, 5, 6,
+		6, 7, 4,
+		// back
+		8, 9, 10,
+		10, 11, 8,
+		// left
+		12, 13, 14,
+		14, 15, 12,
+		// bottom
+		16, 17, 18,
+		18, 19, 16,
+		// top
+		20, 21, 22,
+		22, 23, 20,
+	};
+	// average normals
+	GLfloat head_vertices[] = {
+		// front
+		//x		y		z		S		T			NX		NY		NZ
+		-0.5f, -0.5f,  0.5f,	0.7226f,0.7558f,	0.0f,	0.0f,	-1.0f,
+		0.5f, -0.5f,  0.5f,		0.5937f,0.7558f,	0.0f,	0.0f,	-1.0f,
+		0.5f,  0.5f,  0.5f,		0.5937f,1.0f,		0.0f,	0.0f,	-1.0f,
+		-0.5f,  0.5f,  0.5f,	0.7226f,1.0f,		0.0f,	0.0f,	-1.0f,
+		// right
+		0.5f, -0.5f,  0.5f,	    0.8632f,0.7558f,	-1.0f,	0.0f,	0.0f,
+		0.5f, -0.5f,  -0.5f,	0.9941f,0.7558f,	-1.0f,	0.0f,	0.0f,
+		0.5f,  0.5f,  -0.5f,	0.9941f,1.0f,		-1.0f,	0.0f,	0.0f,
+		0.5f,  0.5f,  0.5f,	    0.8632f,1.0f,		-1.0f,	0.0f,	0.0f,
+		// back
+		-0.5f, -0.5f, -0.5f,	0.0546f,0.7558f,	0.0f,	0.0f,	1.0f,
+		0.5f, -0.5f, -0.5f,		0.1836f,0.7558f,	0.0f,	0.0f,	1.0f,
+		0.5f,  0.5f, -0.5f,		0.1836f,1.0f,		0.0f,	0.0f,	1.0f,
+		-0.5f,  0.5f, -0.5f,	0.0546f,1.0f,		0.0f,	0.0f,	1.0f,
+		// left
+		-0.5f, -0.5f,  -0.5f,	0.3242f,0.7558f,	1.0f,	0.0f,	0.0f,
+		-0.5f, -0.5f,  0.5f,	0.4531f,0.7558f,	1.0f,	0.0f,	0.0f,
+		-0.5f,  0.5f,  0.5f,	0.4531f,1.0f,		1.0f,	0.0f,	0.0f,
+		-0.5f,  0.5f,  -0.5f,	0.3242f,1.0f,		1.0f,	0.0f,	0.0f,
+		// bottom
+		-0.5f, -0.5f,  0.5f,	0.0546f,0.7558f,	0.0f,	1.0f,	0.0f,
+		0.5f,  -0.5f,  0.5f,	0.1836f,0.7558f,	0.0f,	1.0f,	0.0f,
+		 0.5f,  -0.5f,  -0.5f,	0.1836f,1.0f,		0.0f,	1.0f,	0.0f,
+		-0.5f, -0.5f,  -0.5f,	0.0546f,1.0f,		0.0f,	1.0f,	0.0f,
+		//UP
+		 -0.5f, 0.5f,  0.5f,	0.0546f,1.0f,		0.0f,	-1.0f,	0.0f,
+		 0.5f,  0.5f,  0.5f,	0.1836f,1.0f,		0.0f,	-1.0f,	0.0f,
+		  0.5f, 0.5f,  -0.5f,	0.1836f,0.7558f,	0.0f,	-1.0f,	0.0f,
+		 -0.5f, 0.5f,  -0.5f,	0.0546f,0.7558f,	0.0f,	-1.0f,	0.0f,
+	};
+	GLfloat body_vertices[] = {
+		// front
+		//x		y		z		S		T			NX		NY		NZ
+		-0.5f, -0.5f,  0.5f,	0.5917f,0.3789f,	0.0f,	0.0f,	-1.0f,
+		0.5f, -0.5f,  0.5f,		0.7246f,0.3789f,	0.0f,	0.0f,	-1.0f,
+		0.5f,  0.5f,  0.5f,		0.7246f,0.7480f,	0.0f,	0.0f,	-1.0f,
+		-0.5f,  0.5f,  0.5f,	0.5917f,0.7480f,	0.0f,	0.0f,	-1.0f,
+		// right
+		0.5f, -0.5f,  0.5f,	    0.8808f,0.7558f,	-1.0f,	0.0f,	0.0f,
+		0.5f, -0.5f,  -0.5f,	0.9941f,0.7558f,	-1.0f,	0.0f,	0.0f,
+		0.5f,  0.5f,  -0.5f,	0.9941f,1.0f,		-1.0f,	0.0f,	0.0f,
+		0.5f,  0.5f,  0.5f,	    0.8808f,1.0f,		-1.0f,	0.0f,	0.0f,
+		// back
+		-0.5f, -0.5f, -0.5f,	0.0507f,0.3808f,	0.0f,	0.0f,	1.0f,
+		0.5f, -0.5f, -0.5f,		0.1836f,0.3808f,	0.0f,	0.0f,	1.0f,
+		0.5f,  0.5f, -0.5f,		0.1836f,0.7480f,	0.0f,	0.0f,	1.0f,
+		-0.5f,  0.5f, -0.5f,	0.0507f,0.7480f,	0.0f,	0.0f,	1.0f,
+		// left
+		-0.5f, -0.5f,  -0.5f,	0.3242f,0.7558f,	1.0f,	0.0f,	0.0f,
+		-0.5f, -0.5f,  0.5f,	0.4355f,0.7558f,	1.0f,	0.0f,	0.0f,
+		-0.5f,  0.5f,  0.5f,	0.4355f,1.0f,		1.0f,	0.0f,	0.0f,
+		-0.5f,  0.5f,  -0.5f,	0.3242f,1.0f,		1.0f,	0.0f,	0.0f,
+		// bottom
+		-0.5f, -0.5f,  0.5f,	0.0546f,0.7558f,	0.0f,	1.0f,	0.0f,
+		0.5f,  -0.5f,  0.5f,	0.1836f,0.7558f,	0.0f,	1.0f,	0.0f,
+		 0.5f,  -0.5f,  -0.5f,	0.1836f,1.0f,		0.0f,	1.0f,	0.0f,
+		-0.5f, -0.5f,  -0.5f,	0.0546f,1.0f,		0.0f,	1.0f,	0.0f,
+		//UP
+		 -0.5f, 0.5f,  0.5f,	0.0546f,1.0f,		0.0f,	-1.0f,	0.0f,
+		 0.5f,  0.5f,  0.5f,	0.1836f,1.0f,		0.0f,	-1.0f,	0.0f,
+		  0.5f, 0.5f,  -0.5f,	0.1836f,0.7558f,	0.0f,	-1.0f,	0.0f,
+		 -0.5f, 0.5f,  -0.5f,	0.0546f,0.7558f,	0.0f,	-1.0f,	0.0f,
+	};
+
+	GLfloat armL_vertices[] = {
+		// front
+		//x		y		z		S		T			NX		NY		NZ
+		-0.5f, -0.5f,  0.5f,	0.5429f,0.3808f,	0.0f,	0.0f,	-1.0f,
+		0.5f, -0.5f,  0.5f,		0.5898f,0.3808f,	0.0f,	0.0f,	-1.0f,
+		0.5f,  0.5f,  0.5f,		0.5898f,0.7480f,	0.0f,	0.0f,	-1.0f,
+		-0.5f,  0.5f,  0.5f,	0.5429f,0.7480f,	0.0f,	0.0f,	-1.0f,
+		// right
+		0.5f, -0.5f,  0.5f,	    0.8984f,0.3808f,	-1.0f,	0.0f,	0.0f,
+		0.5f, -0.5f,  -0.5f,	0.9589f,0.3808f,	-1.0f,	0.0f,	0.0f,
+		0.5f,  0.5f,  -0.5f,	0.9589f,0.7480f,	-1.0f,	0.0f,	0.0f,
+		0.5f,  0.5f,  0.5f,	    0.8984f,0.7480f,	-1.0f,	0.0f,	0.0f,
+		// back
+		-0.5f, -0.5f, -0.5f,	0.1894f,0.3808f,	0.0f,	0.0f,	1.0f,
+		0.5f, -0.5f, -0.5f,		0.2343f,0.3808f,	0.0f,	0.0f,	1.0f,
+		0.5f,  0.5f, -0.5f,		0.2343f,0.7441f,	0.0f,	0.0f,	1.0f,
+		-0.5f,  0.5f, -0.5f,	0.1894f,0.7441f,	0.0f,	0.0f,	1.0f,
+		// left
+		-0.5f, -0.5f,  -0.5f,	0.3242f,0.7558f,	1.0f,	0.0f,	0.0f,
+		-0.5f, -0.5f,  0.5f,	0.4355f,0.7558f,	1.0f,	0.0f,	0.0f,
+		-0.5f,  0.5f,  0.5f,	0.4355f,1.0f,		1.0f,	0.0f,	0.0f,
+		-0.5f,  0.5f,  -0.5f,	0.3242f,1.0f,		1.0f,	0.0f,	0.0f,
+		// bottom
+		-0.5f, -0.5f,  0.5f,	0.5429f,0.3808f,	0.0f,	1.0f,	0.0f,
+		0.5f,  -0.5f,  0.5f,	0.5898f,0.3808f,	0.0f,	1.0f,	0.0f,
+		 0.5f,  -0.5f,  -0.5f,	0.5898f,0.4335f,	0.0f,	1.0f,	0.0f,
+		-0.5f, -0.5f,  -0.5f,	0.5429f,0.4335f,	0.0f,	1.0f,	0.0f,
+		//UP
+		 -0.5f, 0.5f,  0.5f,	0.0546f,1.0f,		0.0f,	-1.0f,	0.0f,
+		 0.5f,  0.5f,  0.5f,	0.1836f,1.0f,		0.0f,	-1.0f,	0.0f,
+		  0.5f, 0.5f,  -0.5f,	0.1836f,0.7558f,	0.0f,	-1.0f,	0.0f,
+		 -0.5f, 0.5f,  -0.5f,	0.0546f,0.7558f,	0.0f,	-1.0f,	0.0f,
+	};
+
+	GLfloat armR_vertices[] = {
+		// front
+		//x		y		z		S		T			NX		NY		NZ
+		-0.5f, -0.5f,  0.5f,	0.7285f,0.3808f,	0.0f,	0.0f,	-1.0f,
+		0.5f, -0.5f,  0.5f,		0.7734f,0.3808f,	0.0f,	0.0f,	-1.0f,
+		0.5f,  0.5f,  0.5f,		0.7734f,0.7460f,	0.0f,	0.0f,	-1.0f,
+		-0.5f,  0.5f,  0.5f,	0.7285f,0.7460f,	0.0f,	0.0f,	-1.0f,
+		// right
+		0.5f, -0.5f,  0.5f,	    0.3593f,0.3808f,	-1.0f,	0.0f,	0.0f,
+		0.5f, -0.5f,  -0.5f,	0.4179f,0.3808f,	-1.0f,	0.0f,	0.0f,
+		0.5f,  0.5f,  -0.5f,	0.4179f,0.7480f,	-1.0f,	0.0f,	0.0f,
+		0.5f,  0.5f,  0.5f,	    0.3593f,0.7480f,	-1.0f,	0.0f,	0.0f,
+		// back
+		-0.5f, -0.5f, -0.5f,	0.1894f,0.3808f,	0.0f,	0.0f,	1.0f,
+		0.5f, -0.5f, -0.5f,		0.2343f,0.3808f,	0.0f,	0.0f,	1.0f,
+		0.5f,  0.5f, -0.5f,		0.2343f,0.7441f,	0.0f,	0.0f,	1.0f,
+		-0.5f,  0.5f, -0.5f,	0.1894f,0.7441f,	0.0f,	0.0f,	1.0f,
+		// left
+		-0.5f, -0.5f,  -0.5f,	0.3572f,0.3808f,	1.0f,	0.0f,	0.0f,
+		-0.5f, -0.5f,  0.5f,	0.4179f,0.3808f,	1.0f,	0.0f,	0.0f,
+		-0.5f,  0.5f,  0.5f,	0.4179f,0.7480f,	1.0f,	0.0f,	0.0f,
+		-0.5f,  0.5f,  -0.5f,	0.3572f,0.7480f,	1.0f,	0.0f,	0.0f,
+		// bottom
+		-0.5f, -0.5f,  0.5f,	0.5898f,0.3808f,	0.0f,	1.0f,	0.0f,
+		0.5f,  -0.5f,  0.5f,	0.5429f,0.3808f,	0.0f,	1.0f,	0.0f,
+		 0.5f,  -0.5f,  -0.5f,	0.5429f,0.4335f,	0.0f,	1.0f,	0.0f,
+		-0.5f, -0.5f,  -0.5f,	0.5898f,0.4335f,	0.0f,	1.0f,	0.0f,
+		//UP
+		 -0.5f, 0.5f,  0.5f,	0.0546f,1.0f,		0.0f,	-1.0f,	0.0f,
+		 0.5f,  0.5f,  0.5f,	0.1836f,1.0f,		0.0f,	-1.0f,	0.0f,
+		  0.5f, 0.5f,  -0.5f,	0.1836f,0.7558f,	0.0f,	-1.0f,	0.0f,
+		 -0.5f, 0.5f,  -0.5f,	0.0546f,0.7558f,	0.0f,	-1.0f,	0.0f,
+	};
+
+	GLfloat legL_vertices[] = {
+		// front
+		//x		y		z		S		T			NX		NY		NZ
+		-0.5f, -0.5f,  0.5f,	0.5937f,0.0f,		0.0f,	0.0f,	-1.0f,
+		0.5f, -0.5f,  0.5f,		0.6562f,0.0f,		0.0f,	0.0f,	-1.0f,
+		0.5f,  0.5f,  0.5f,		0.6562f,0.3730f,	0.0f,	0.0f,	-1.0f,
+		-0.5f,  0.5f,  0.5f,	0.5917f,0.3730f,	0.0f,	0.0f,	-1.0f,  //<--aquí
+		// right
+		0.5f, -0.5f,  0.5f,	    0.8984f,0.0f,		-1.0f,	0.0f,	0.0f,
+		0.5f, -0.5f,  -0.5f,	0.9589f,0.0f,		-1.0f,	0.0f,	0.0f,
+		0.5f,  0.5f,  -0.5f,	0.9589f,0.3730f,	-1.0f,	0.0f,	0.0f,
+		0.5f,  0.5f,  0.5f,	    0.8984f,0.3730f,	-1.0f,	0.0f,	0.0f,
+		// back
+		-0.5f, -0.5f, -0.5f,	0.0546f,0.0f,		0.0f,	0.0f,	1.0f,
+		0.5f, -0.5f, -0.5f,		0.1152f,0.0f,		0.0f,	0.0f,	1.0f,
+		0.5f,  0.5f, -0.5f,		0.1152f,0.3730f,	0.0f,	0.0f,	1.0f,
+		-0.5f,  0.5f, -0.5f,	0.0546f,0.3730f,	0.0f,	0.0f,	1.0f,
+		// left
+		-0.5f, -0.5f,  -0.5f,	0.3572f,0.0f,		1.0f,	0.0f,	0.0f,
+		-0.5f, -0.5f,  0.5f,	0.4179f,0.0f,		1.0f,	0.0f,	0.0f,
+		-0.5f,  0.5f,  0.5f,	0.4179f,0.3730f,	1.0f,	0.0f,	0.0f,
+		-0.5f,  0.5f,  -0.5f,	0.3572f,0.3730f,	1.0f,	0.0f,	0.0f,
+		// bottom
+		-0.5f, -0.5f,  0.5f,	0.3572f,0.0f,		0.0f,	1.0f,	0.0f,
+		0.5f,  -0.5f,  0.5f,	0.4179f,0.0f,		0.0f,	1.0f,	0.0f,
+		 0.5f,  -0.5f,  -0.5f,	0.4179f,0.0293f,	0.0f,	1.0f,	0.0f,
+		-0.5f, -0.5f,  -0.5f,	0.3572f,0.0293f,	0.0f,	1.0f,	0.0f,
+		//UP
+		 -0.5f, 0.5f,  0.5f,	0.3572f,0.0f,		0.0f,	-1.0f,	0.0f,
+		 0.5f,  0.5f,  0.5f,	0.4179f,0.0f,		0.0f,	-1.0f,	0.0f,
+		  0.5f, 0.5f,  -0.5f,	0.4179f,0.0293f,	0.0f,	-1.0f,	0.0f,
+		 -0.5f, 0.5f,  -0.5f,	0.3572f,0.0293f,	0.0f,	-1.0f,	0.0f,
+	};
+
+	GLfloat legR_vertices[] = {
+		// front
+		//x		y		z		S		T			NX		NY		NZ
+		-0.5f, -0.5f,  0.5f,	0.6562f,0.0f,		0.0f,	0.0f,	-1.0f,
+		0.5f, -0.5f,  0.5f,		0.7207f,0.0f,		0.0f,	0.0f,	-1.0f,
+		0.5f,  0.5f,  0.5f,		0.7207f,0.3730f,	0.0f,	0.0f,	-1.0f,
+		-0.5f,  0.5f,  0.5f,	0.6562f,0.3730f,	0.0f,	0.0f,	-1.0f,  //<--aquí
+		// right
+		0.5f, -0.5f,  0.5f,	    0.8984f,0.0f,		-1.0f,	0.0f,	0.0f,
+		0.5f, -0.5f,  -0.5f,	0.9589f,0.0f,		-1.0f,	0.0f,	0.0f,
+		0.5f,  0.5f,  -0.5f,	0.9589f,0.3730f,	-1.0f,	0.0f,	0.0f,
+		0.5f,  0.5f,  0.5f,	    0.8984f,0.3730f,	-1.0f,	0.0f,	0.0f,
+		// back
+		-0.5f, -0.5f, -0.5f,	0.1152f,0.0f,		0.0f,	0.0f,	1.0f,
+		0.5f, -0.5f, -0.5f,		0.1816f,0.0f,		0.0f,	0.0f,	1.0f,
+		0.5f,  0.5f, -0.5f,		0.1816f,0.3730f,	0.0f,	0.0f,	1.0f,
+		-0.5f,  0.5f, -0.5f,	0.1152f,0.3730f,	0.0f,	0.0f,	1.0f,
+		// left
+		-0.5f, -0.5f,  -0.5f,	0.3572f,0.0f,		1.0f,	0.0f,	0.0f,
+		-0.5f, -0.5f,  0.5f,	0.4179f,0.0f,		1.0f,	0.0f,	0.0f,
+		-0.5f,  0.5f,  0.5f,	0.4179f,0.3730f,	1.0f,	0.0f,	0.0f,
+		-0.5f,  0.5f,  -0.5f,	0.3572f,0.3730f,	1.0f,	0.0f,	0.0f,
+		// bottom
+		-0.5f, -0.5f,  0.5f,	0.3572f,0.0f,		0.0f,	1.0f,	0.0f,
+		0.5f,  -0.5f,  0.5f,	0.4179f,0.0f,		0.0f,	1.0f,	0.0f,
+		 0.5f,  -0.5f,  -0.5f,	0.4179f,0.0293f,	0.0f,	1.0f,	0.0f,
+		-0.5f, -0.5f,  -0.5f,	0.3572f,0.0293f,	0.0f,	1.0f,	0.0f,
+		//UP
+		 -0.5f, 0.5f,  0.5f,	0.3572f,0.0f,		0.0f,	-1.0f,	0.0f,
+		 0.5f,  0.5f,  0.5f,	0.4179f,0.0f,		0.0f,	-1.0f,	0.0f,
+		  0.5f, 0.5f,  -0.5f,	0.4179f,0.0293f,	0.0f,	-1.0f,	0.0f,
+		 -0.5f, 0.5f,  -0.5f,	0.3572f,0.0293f,	0.0f,	-1.0f,	0.0f,
+	};
+
+	Mesh *head = new Mesh();
+	head->CreateMesh(head_vertices, cubos_indices, 192, 36);
+	meshList.push_back(head);
+
+	Mesh *body = new Mesh();
+	body->CreateMesh(body_vertices, cubos_indices, 192, 36);
+	meshList.push_back(body);
+
+	Mesh *armL = new Mesh();
+	armL->CreateMesh(armL_vertices, cubos_indices, 192, 36);
+	meshList.push_back(armL);
+
+	Mesh *armR = new Mesh();
+	armR->CreateMesh(armR_vertices, cubos_indices, 192, 36);
+	meshList.push_back(armR); 
+	
+	Mesh *legL = new Mesh();
+	legL->CreateMesh(legL_vertices, cubos_indices, 192, 36);
+	meshList.push_back(legL);
+
+	Mesh *legR = new Mesh();
+	legR->CreateMesh(legR_vertices, cubos_indices, 192, 36);
+	meshList.push_back(legR);
+}
+
 void CreateShaders()
 {
 	Shader *shader1 = new Shader();
@@ -225,6 +474,7 @@ int main()
 
 	CreateObjects();
 	CrearCubo();
+	CrearPersonajes();
 	CreateShaders();
 
 /*----------------------------POS Y CONFIG DE LA CAMARA----------------------------------*/
@@ -237,8 +487,14 @@ int main()
 	plainTexture = Texture("Textures/plain.png");
 	plainTexture.LoadTextureA();
 
-	Portada = Texture("Textures/portadaJuego.png");
+	Portada = Texture("Textures/portadaJuego.tga");
 	Portada.LoadTextureA();
+
+	Isaac = Texture("Textures/Isaac.tga");
+	Isaac.LoadTextureA();
+
+	Necromorph = Texture("Textures/Necromorph.tga");
+	Necromorph.LoadTextureA();
 
 	Material_brillante = Material(4.0f, 256);
 	Material_opaco = Material(0.3f, 4);
@@ -294,19 +550,19 @@ int main()
 	glm::vec3 posblackhawk = glm::vec3(2.0f, 0.0f, 0.0f);
 
 	std::vector<std::string> skyboxFaces;
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_rt.tga");
+	/*skyboxFaces.push_back("Textures/Skybox/cupertin-lake_rt.tga");
 	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_lf.tga");
 	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_dn.tga");
 	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_up.tga");
 	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_bk.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_ft.tga");
+	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_ft.tga");*/
 
-	/*skyboxFaces.push_back("Textures/Skybox/cupertin-lake-night_rt.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake-night_lf.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake-night_dn.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake-night_up.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake-night_bk.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake-night_ft.tga");*/
+	skyboxFaces.push_back("Textures/Skybox/Space_rt.tga");
+	skyboxFaces.push_back("Textures/Skybox/Space_lf.tga");
+	skyboxFaces.push_back("Textures/Skybox/Space_dn.tga");
+	skyboxFaces.push_back("Textures/Skybox/Space_up.tga");
+	skyboxFaces.push_back("Textures/Skybox/Space_bk.tga");
+	skyboxFaces.push_back("Textures/Skybox/Space_ft.tga");
 
 
 	skybox = Skybox(skyboxFaces);
@@ -387,12 +643,107 @@ int main()
 		meshList[0]->RenderMesh();
 		
 		//Cubo
-		model = glm::mat4(1.0);
+		/*model = glm::mat4(1.0);
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		plainTexture.UseTexture();
 		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		meshList[1]->RenderMesh();
+		meshList[1]->RenderMesh();*/
 
+		//Head Isaac
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(0.0f, 10.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Isaac.UseTexture();
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		meshList[2]->RenderMesh();
+		//Body Isaac
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(0.0f, 8.5f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.0f, 2.0f, 0.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Isaac.UseTexture();
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		meshList[3]->RenderMesh();
+		//ArmL Isaac
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(0.7f, 8.5f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.4f, 2.0f, 0.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Isaac.UseTexture();
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		meshList[4]->RenderMesh();
+		//ArmR Isaac
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-0.7f, 8.5f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.4f, 2.0f, 0.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Isaac.UseTexture();
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		meshList[5]->RenderMesh();
+		//LegL Isaac
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-0.25f, 6.5f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.5f, 2.0f, 0.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Isaac.UseTexture();
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		meshList[6]->RenderMesh();
+		//LegR Isaac
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(0.25f, 6.5f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.5f, 2.0f, 0.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Isaac.UseTexture();
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		meshList[7]->RenderMesh();
+
+		//Head Necromorph
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(3.0f, 10.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Necromorph.UseTexture();
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		meshList[2]->RenderMesh();
+		//Body Necromorph
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(3.0f, 8.5f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.0f, 2.0f, 0.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Necromorph.UseTexture();
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		meshList[3]->RenderMesh();
+		//ArmL Necromorph
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(3.7f, 8.5f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.4f, 2.0f, 0.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Necromorph.UseTexture();
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		meshList[4]->RenderMesh();
+		//ArmR Necromorph
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(2.3f, 8.5f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.4f, 2.0f, 0.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Necromorph.UseTexture();
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		meshList[5]->RenderMesh();
+		//LegL Necromorph
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(2.75f, 6.5f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.5f, 2.0f, 0.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Necromorph.UseTexture();
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		meshList[6]->RenderMesh();
+		//LegR Necromorph
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(3.25f, 6.5f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.5f, 2.0f, 0.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Necromorph.UseTexture();
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		meshList[7]->RenderMesh();
 
 
 		////Cono
@@ -409,8 +760,6 @@ int main()
 		//Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		/////dirtTexture.UseTexture();
 		//Cilindro.RenderModel();
-
-
 
 
 		glUseProgram(0);
