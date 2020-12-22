@@ -1,0 +1,12 @@
+# Blender MTL File: 'luces.blend'
+# Material Count: 1
+
+newmtl Material
+Ns 323.999994
+Ka 0.945455 0.945455 0.945455
+Kd 0.030205 0.038304 0.026299
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
