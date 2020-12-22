@@ -23,7 +23,7 @@
 #include <gtc\matrix_transform.hpp>
 #include <gtc\type_ptr.hpp>
 //para probar el importer
-//#include<assimp/Importer.hpp>
+// #include<assimp/Importer.hpp>
 
 #include "Window.h"
 #include "Mesh.h"
