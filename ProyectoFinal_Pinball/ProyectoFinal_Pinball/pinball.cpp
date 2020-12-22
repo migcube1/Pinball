@@ -53,6 +53,7 @@ Camera camera;
 
 // Delaración de las Texturas
 Texture plainTexture;
+Texture plainDark;
 Texture Portada;
 Texture Isaac;
 Texture Necromorph;
@@ -69,7 +70,7 @@ PointLight pointLights[MAX_POINT_LIGHTS];
 SpotLight spotLights[MAX_SPOT_LIGHTS];
 
 //Declaración de modelos
-Model Blackhawk_M;
+Model MuroEsquinas;
 Model Cono;
 Model Cilindro;
 
@@ -164,48 +165,100 @@ void CrearCubo()
 	GLfloat cubo_vertices[] = {
 		// front
 		//x		y		z		S		T			NX		NY		NZ
-		-0.5f, -0.5f,  0.5f,	0.27f,  0.35f,		0.0f,	0.0f,	-1.0f,	//0
-		0.5f, -0.5f,  0.5f,		0.48f,	0.35f,		0.0f,	0.0f,	-1.0f,	//1
-		0.5f,  0.5f,  0.5f,		0.48f,	0.64f,		0.0f,	0.0f,	-1.0f,	//2
-		-0.5f,  0.5f,  0.5f,	0.27f,	0.64f,		0.0f,	0.0f,	-1.0f,	//3
+		-0.5f, -0.5f,  0.5f,	0.0f,   0.0f,		0.0f,	0.0f,	-1.0f,
+		0.5f, -0.5f,  0.5f,		1.0f,	0.0f,		0.0f,	0.0f,	-1.0f,
+		0.5f,  0.5f,  0.5f,		1.0f,	1.0f,		0.0f,	0.0f,	-1.0f,
+		-0.5f,  0.5f,  0.5f,	0.0f,	0.0f,		0.0f,	0.0f,	-1.0f,
 		// right
 		//x		y		z		S		T
-		0.5f, -0.5f,  0.5f,	    0.52f,  0.35f,		-1.0f,	0.0f,	0.0f,
-		0.5f, -0.5f,  -0.5f,	0.73f,	0.35f,		-1.0f,	0.0f,	0.0f,
-		0.5f,  0.5f,  -0.5f,	0.73f,	0.64f,		-1.0f,	0.0f,	0.0f,
-		0.5f,  0.5f,  0.5f,	    0.52f,	0.64f,		-1.0f,	0.0f,	0.0f,
+		0.5f, -0.5f,  0.5f,	    0.0f,   0.0f,		-1.0f,	0.0f,	0.0f,
+		0.5f, -0.5f,  -0.5f,	1.0f,	0.0f,		-1.0f,	0.0f,	0.0f,
+		0.5f,  0.5f,  -0.5f,	1.0f,	1.0f,		-1.0f,	0.0f,	0.0f,
+		0.5f,  0.5f,  0.5f,	    0.0f,	1.0f,		-1.0f,	0.0f,	0.0f,
 		// back
-		-0.5f, -0.5f, -0.5f,	0.77f,	0.35f,		0.0f,	0.0f,	1.0f,
-		0.5f, -0.5f, -0.5f,		0.98f,	0.35f,		0.0f,	0.0f,	1.0f,
-		0.5f,  0.5f, -0.5f,		0.98f,	0.64f,		0.0f,	0.0f,	1.0f,
-		-0.5f,  0.5f, -0.5f,	0.77f,	0.64f,		0.0f,	0.0f,	1.0f,
+		-0.5f, -0.5f, -0.5f,	0.0f,	0.0f,		0.0f,	0.0f,	1.0f,
+		0.5f, -0.5f, -0.5f,		1.0f,	0.0f,		0.0f,	0.0f,	1.0f,
+		0.5f,  0.5f, -0.5f,		1.0f,	1.0f,		0.0f,	0.0f,	1.0f,
+		-0.5f,  0.5f, -0.5f,	0.0f,	1.0f,		0.0f,	0.0f,	1.0f,
 
 		// left
 		//x		y		z		S		T
-		-0.5f, -0.5f,  -0.5f,	0.0f,	0.35f,		1.0f,	0.0f,	0.0f,
-		-0.5f, -0.5f,  0.5f,	0.23f,  0.35f,		1.0f,	0.0f,	0.0f,
-		-0.5f,  0.5f,  0.5f,	0.23f,	0.64f,		1.0f,	0.0f,	0.0f,
-		-0.5f,  0.5f,  -0.5f,	0.0f,	0.64f,		1.0f,	0.0f,	0.0f,
+		-0.5f, -0.5f,  -0.5f,	0.0f,	0.0f,		1.0f,	0.0f,	0.0f,
+		-0.5f, -0.5f,  0.5f,	1.0f,   0.0f,		1.0f,	0.0f,	0.0f,
+		-0.5f,  0.5f,  0.5f,	1.0f,	1.0f,		1.0f,	0.0f,	0.0f,
+		-0.5f,  0.5f,  -0.5f,	0.0f,	1.0f,		1.0f,	0.0f,	0.0f,
 
 		// bottom
 		//x		y		z		S		T
-		-0.5f, -0.5f,  0.5f,	0.27f,	0.02f,		0.0f,	1.0f,	0.0f,
-		0.5f,  -0.5f,  0.5f,	0.48f,  0.02f,		0.0f,	1.0f,	0.0f,
-		 0.5f,  -0.5f,  -0.5f,	0.48f,	0.31f,		0.0f,	1.0f,	0.0f,
-		-0.5f, -0.5f,  -0.5f,	0.27f,	0.31f,		0.0f,	1.0f,	0.0f,
+		-0.5f, -0.5f,  0.5f,	0.0f,	0.0f,		0.0f,	1.0f,	0.0f,
+		0.5f,  -0.5f,  0.5f,	1.0f,   0.0f,		0.0f,	1.0f,	0.0f,
+		 0.5f,  -0.5f,  -0.5f,	1.0f,	1.0f,		0.0f,	1.0f,	0.0f,
+		-0.5f, -0.5f,  -0.5f,	0.0f,	1.0f,		0.0f,	1.0f,	0.0f,
 
 		//UP
 		 //x		y		z		S		T
-		 -0.5f, 0.5f,  0.5f,	0.27f,	0.68f,		0.0f,	-1.0f,	0.0f,
-		 0.5f,  0.5f,  0.5f,	0.48f,  0.68f,		0.0f,	-1.0f,	0.0f,
-		  0.5f, 0.5f,  -0.5f,	0.48f,	0.98f,		0.0f,	-1.0f,	0.0f,
-		 -0.5f, 0.5f,  -0.5f,	0.27f,	0.98f,		0.0f,	-1.0f,	0.0f,
+		 -0.5f, 0.5f,  0.5f,	0.0f,	0.0f,		0.0f,	-1.0f,	0.0f,
+		 0.5f,  0.5f,  0.5f,	1.0f,   0.0f,		0.0f,	-1.0f,	0.0f,
+		  0.5f, 0.5f,  -0.5f,	1.0f,	1.0f,		0.0f,	-1.0f,	0.0f,
+		 -0.5f, 0.5f,  -0.5f,	0.0f,	1.0f,		0.0f,	-1.0f,	0.0f,
 
 	};
 	
 	Mesh *cubo = new Mesh();
 	cubo->CreateMesh(cubo_vertices, cubo_indices, 192, 36);
 	meshList.push_back(cubo);
+
+}
+
+void CrearPrisma()
+{
+	unsigned int prismaT_indices[] = {
+		// front
+		0, 1, 2,
+		0, 2, 3,
+		// left
+		4, 5, 6,
+		4, 6, 7,
+		// back
+		8, 9, 10,
+		8, 10, 11,
+		// bottom
+		12, 13, 14,
+		// top
+		15, 16, 17,
+	};
+	// average normals
+	GLfloat prismaT_vertices[] = {
+		// front
+		//x		y		z		S		T			NX		NY		NZ
+		-0.5f,  0.5f,  0.5f,	0.0f,	0.0f,		0.0f,	0.0f,	-1.0f,
+		-0.5f, -0.5f,  0.5f,	0.0f,   0.0f,		0.0f,	0.0f,	-1.0f,
+		0.5f, -0.5f,  0.5f,		1.0f,	0.0f,		0.0f,	0.0f,	-1.0f,
+		0.5f,  0.5f,  0.5f,		1.0f,	1.0f,		0.0f,	0.0f,	-1.0f,
+		// left
+		-0.5f,  0.5f,  -0.5f,	0.0f,	1.0f,		1.0f,	0.0f,	0.0f,
+		-0.5f, -0.5f,  -0.5f,	0.0f,	0.0f,		1.0f,	0.0f,	0.0f,
+		-0.5f, -0.5f,  0.5f,	1.0f,   0.0f,		1.0f,	0.0f,	0.0f,
+		-0.5f,  0.5f,  0.5f,	1.0f,	1.0f,		1.0f,	0.0f,	0.0f,
+		// back
+		-0.5f,  0.5f, -0.5f,	0.0f,	1.0f,		-1.0f,	0.0f,	1.0f,
+		-0.5f, -0.5f, -0.5f,	0.0f,	0.0f,		-1.0f,	0.0f,	1.0f,
+		0.5f, -0.5f,  0.5f,		1.0f,	0.0f,		-1.0f,	0.0f,	1.0f,
+		0.5f,  0.5f,  0.5f,		1.0f,	1.0f,		-1.0f,	0.0f,	1.0f,
+		// bottom
+		-0.5f, -0.5f,  -0.5f,	0.0f,	1.0f,		0.0f,	1.0f,	0.0f,
+		-0.5f, -0.5f,  0.5f,	0.0f,	0.0f,		0.0f,	1.0f,	0.0f,
+		 0.5f,  -0.5f,  0.5f,	1.0f,	1.0f,		0.0f,	1.0f,	0.0f,
+		//UP
+		 -0.5f, 0.5f,  -0.5f,	0.0f,	1.0f,		0.0f,	-1.0f,	0.0f,
+		 -0.5f, 0.5f,  0.5f,	0.0f,	0.0f,		0.0f,	-1.0f,	0.0f,
+		  0.5f, 0.5f,  0.5f,	1.0f,	1.0f,		0.0f,	-1.0f,	0.0f,
+
+	};
+
+	Mesh *prismaT = new Mesh();
+	prismaT->CreateMesh(prismaT_vertices, prismaT_indices, 144, 24);
+	meshList.push_back(prismaT);
 
 }
 
@@ -373,7 +426,7 @@ void CrearPersonajes()
 		-0.5f, -0.5f,  0.5f,	0.5937f,0.0f,		0.0f,	0.0f,	-1.0f,
 		0.5f, -0.5f,  0.5f,		0.6562f,0.0f,		0.0f,	0.0f,	-1.0f,
 		0.5f,  0.5f,  0.5f,		0.6562f,0.3730f,	0.0f,	0.0f,	-1.0f,
-		-0.5f,  0.5f,  0.5f,	0.5917f,0.3730f,	0.0f,	0.0f,	-1.0f,  //<--aquí
+		-0.5f,  0.5f,  0.5f,	0.5917f,0.3730f,	0.0f,	0.0f,	-1.0f,
 		// right
 		0.5f, -0.5f,  0.5f,	    0.8984f,0.0f,		-1.0f,	0.0f,	0.0f,
 		0.5f, -0.5f,  -0.5f,	0.9589f,0.0f,		-1.0f,	0.0f,	0.0f,
@@ -407,7 +460,7 @@ void CrearPersonajes()
 		-0.5f, -0.5f,  0.5f,	0.6562f,0.0f,		0.0f,	0.0f,	-1.0f,
 		0.5f, -0.5f,  0.5f,		0.7207f,0.0f,		0.0f,	0.0f,	-1.0f,
 		0.5f,  0.5f,  0.5f,		0.7207f,0.3730f,	0.0f,	0.0f,	-1.0f,
-		-0.5f,  0.5f,  0.5f,	0.6562f,0.3730f,	0.0f,	0.0f,	-1.0f,  //<--aquí
+		-0.5f,  0.5f,  0.5f,	0.6562f,0.3730f,	0.0f,	0.0f,	-1.0f,
 		// right
 		0.5f, -0.5f,  0.5f,	    0.8984f,0.0f,		-1.0f,	0.0f,	0.0f,
 		0.5f, -0.5f,  -0.5f,	0.9589f,0.0f,		-1.0f,	0.0f,	0.0f,
@@ -475,6 +528,7 @@ int main()
 	CreateObjects();
 	CrearCubo();
 	CrearPersonajes();
+	CrearPrisma();
 	CreateShaders();
 
 /*----------------------------POS Y CONFIG DE LA CAMARA----------------------------------*/
@@ -486,6 +540,9 @@ int main()
 
 	plainTexture = Texture("Textures/plain.png");
 	plainTexture.LoadTextureA();
+
+	plainDark = Texture("Textures/plainDark.png");
+	plainDark.LoadTextureA();
 
 	Portada = Texture("Textures/portadaJuego.tga");
 	Portada.LoadTextureA();
@@ -500,6 +557,9 @@ int main()
 	Material_opaco = Material(0.3f, 4);
 
 /*------------------------------------MODELOS--------------------------------------------*/
+	MuroEsquinas = Model();
+	MuroEsquinas.LoadModel("Models/muroEsquina.obj");
+
 	Cono = Model();
 	Cono.LoadModel("Models/cono.obj");
 
@@ -628,26 +688,102 @@ int main()
 		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
 		glUniform3f(uniformEyePosition, camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
 
-
+		/*-------------------------------------------------------------------------------------------*/
 		/*---------------------------------------DIBUJADO--------------------------------------------*/
-
+		/*-------------------------------------------------------------------------------------------*/
 		glm::mat4 model(1.0);
+		glm::mat4 modelRot(1.0);
 
+		/*---------------------------------------Plano--------------------------------------------*/
 		//Plano base
 		model = glm::mat4(1.0);
-		model = glm::rotate(model, 5 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		modelRot = model = glm::rotate(model, 5 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(15.0f, 1.0f, 20.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Portada.UseTexture();
 		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		meshList[0]->RenderMesh();
 		
-		//Cubo
-		/*model = glm::mat4(1.0);
+		/*---------------------------------------MUROS--------------------------------------------*/
+		//Perímetros
+		//Right
+		model = modelRot;
+		model = glm::translate(model, glm::vec3(15.0f, 1.5f, 5.0f));
+		model = glm::scale(model, glm::vec3(0.25f, 3.0f, 30.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		plainTexture.UseTexture();
-		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		meshList[1]->RenderMesh();*/
+		plainDark.UseTexture();
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		meshList[1]->RenderMesh();
+		//Left
+		model = modelRot;
+		model = glm::translate(model, glm::vec3(-15.0f, 1.5f, 5.0f));
+		model = glm::scale(model, glm::vec3(0.25f, 3.0f, 30.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		plainDark.UseTexture();
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		meshList[1]->RenderMesh();
+		//Top
+		model = modelRot;
+		model = glm::translate(model, glm::vec3(0.0f, 1.5f, -20.0f));
+		model = glm::scale(model, glm::vec3(10.0f, 3.0f, 0.25f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		plainDark.UseTexture();
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		meshList[1]->RenderMesh();
+		//Down
+		model = modelRot;
+		model = glm::translate(model, glm::vec3(0.0f, 1.5f, 20.0f));
+		model = glm::scale(model, glm::vec3(30.0f, 3.0f, 0.25f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		plainDark.UseTexture();
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		meshList[1]->RenderMesh();
+
+		//Muros internos
+		model = modelRot;
+		model = glm::translate(model, glm::vec3(12.0f, 1.5f, 4.0f));
+		model = glm::scale(model, glm::vec3(0.25f, 3.0f, 23.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		plainDark.UseTexture();
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		meshList[1]->RenderMesh();
+		//Triángulo izq
+		model = modelRot;
+		model = glm::translate(model, glm::vec3(-10.375f, 1.5f, 10.5f));
+		model = glm::scale(model, glm::vec3(9.25f, 3.0f, 10.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		plainDark.UseTexture();
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		meshList[8]->RenderMesh();
+		//Triángulo der
+		model = modelRot;
+		model = glm::translate(model, glm::vec3(7.375f, 1.5f, 10.5f));
+		model = glm::scale(model, glm::vec3(-9.25f, 3.0f, 10.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		plainDark.UseTexture();
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		meshList[8]->RenderMesh();
+
+		//MuroEsquinas superior
+		//model = glm::mat4(1.0);
+		model = modelRot;
+		model = glm::translate(model, glm::vec3(10.0f, 1.5f, -15.0f));
+		model = glm::scale(model, glm::vec3(10.0f, 3.0f, 10.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		//plainDark.UseTexture();
+		//Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		MuroEsquinas.RenderModel();
+
+		model = modelRot;
+		model = glm::translate(model, glm::vec3(-10.0f, 1.5f, -15.0f));
+		model = glm::scale(model, glm::vec3(-10.0f, 3.0f, 10.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		//plainDark.UseTexture();
+		//Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		MuroEsquinas.RenderModel();
+
+
+		/*---------------------------------------PERSONAJES--------------------------------------------*/
 
 		//Head Isaac
 		model = glm::mat4(1.0);
