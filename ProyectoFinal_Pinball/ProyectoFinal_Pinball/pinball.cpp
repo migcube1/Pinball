@@ -77,7 +77,7 @@ Model Cilindro;
 Model Luces;
 
 // Declaración de la canica
-Sphere canica = Sphere(1.0, 20.0, 20.0);
+Sphere canica = Sphere(1, 20, 20);
 
 //Declaración del skybox
 Skybox skybox;
@@ -536,6 +536,12 @@ int main()
 	CrearPrisma();
 	CreateShaders();
 
+	//Contador para las luces
+	int iCount = 2;
+	
+	canica.init();
+	canica.load();
+
 /*----------------------------POS Y CONFIG DE LA CAMARA----------------------------------*/
 							//pos					Up							Yaw		Pitch  Mspeed Tspeed
 	camera = Camera(glm::vec3(0.0f, 10.0f, 20.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 7.0f, 0.7f);
@@ -576,6 +582,16 @@ int main()
 
 /*---------------------------------------LUCES--------------------------------------------*/
 
+	//Posición de las verdes y rojas del lado izquierdo
+	glm::vec3 posLucesGR_Left[] = {
+		glm::vec3(-7.0f, 1.0f, 13.0f),		//R
+		glm::vec3(-9.0f, 1.0f, 11.0f),		//V
+		glm::vec3(-11.0f, 1.0f, 9.0f),		//R
+		glm::vec3(-13.0f, 1.25f, 7.0f),		//V
+		glm::vec3(-13.0f, 1.5f, 3.0f),		//R
+		glm::vec3(-13.0f, 1.75f, -1.0f),	//V	
+	};
+
 	//luz direccional, sólo 1 y siempre debe de existir
 	mainLight = DirectionalLight(1.0f, 1.0f, 1.0f, 
 								0.5f, 0.5f,
@@ -594,33 +610,33 @@ int main()
 	unsigned int spotLightCount = 0;
 
 	//Luz de Paletas inferiores
-	spotLights[0] = SpotLight(1.0f, 0.0f, 1.0f,	//Color
+	spotLights[0] = SpotLight(1.0f, 0.0f, 1.0f,	//Color ROSA
 		0.0f, 2.0f,								//Intensity
-		0.0f, 2.0f, 15.0f,						//Pos
+		0.0f, 2.0f, 16.0f,						//Pos
 		0.0f, 0.0f, -1.0f,						//Dir
 		1.0f, 0.0f, 0.0f,						//con, lin, exp
 		15.0f);									//Edg
 	spotLightCount++;
 
 
-	spotLights[1] = SpotLight(1.0f, 0.0f, 0.0f,	//Color
+	spotLights[1] = SpotLight(1.0f, 0.0f, 0.0f,	//Color ROJO
 		0.0f, 2.0f,								//Intensity
-		-7.0f, 1.0f, 12.0f,						//Pos
+		-7.0f, 1.0f, 13.0f,						//Pos
 		0.0f, -1.0f, 0.0f,						//Dir
 		1.0f, 0.0f, 0.0f,						//con, lin, exp
 		15.0f);									//Edg
 	spotLightCount++;
 
-	spotLights[2] = SpotLight(0.0f, 1.0f, 0.0f,	//Color
+	spotLights[2] = SpotLight(0.0f, 1.0f, 0.0f,	//Color VERDE
 		0.0f, 2.0f,								//Intensity
-		-9.0f, 1.0f, 10.0f,						//Pos
+		-9.0f, 1.0f, 11.0f,						//Pos
 		0.0f, -1.0f, 0.0f,						//Dir
 		1.0f, 0.0f, 0.0f,						//con, lin, exp
 		15.0f);									//Edg
 	spotLightCount++;
 
 	//linterna
-	spotLights[3] = SpotLight(1.0f, 0.0f, 1.0f,	//Color
+	spotLights[3] = SpotLight(1.0f, 1.0f, 1.0f,	//Color
 		0.0f, 2.0f,								//Intensity
 		0.0f, 0.0f, 0.0f,						//Pos
 		0.0f, -1.0f, 0.0f,						//Dir
@@ -630,7 +646,6 @@ int main()
 
 
 
-	
 /*---------------------------------------SKYBOX--------------------------------------------*/
 
 	glm::vec3 posblackhawk = glm::vec3(2.0f, 0.0f, 0.0f);
@@ -692,16 +707,23 @@ int main()
 		uniformSpecularIntensity = shaderList[0].GetSpecularIntensityLocation();
 		uniformShininess = shaderList[0].GetShininessLocation();
 
-		//Asociamos la cámara con la lluz de la linterna
+		//Asociamos la cámara con la luz de la linterna
 		glm::vec3 lowerLight = camera.getCameraPosition();
 		lowerLight.y -= 0.3f;
-		spotLights[4].SetFlash(lowerLight, camera.getCameraDirection());
+		spotLights[3].SetFlash(lowerLight, camera.getCameraDirection());
 
 		//Cargamos la luces al shader
 		shaderList[0].SetDirectionalLight(&mainLight);
 		shaderList[0].SetPointLights(pointLights, pointLightCount);
 		shaderList[0].SetSpotLights(spotLights, spotLightCount);
-		
+
+		//Control de las luces verdes y rojas lado izquierdo
+		if (iCount > 5) { iCount = 0; }
+		spotLights[1].SetPos(posLucesGR_Left[iCount]);
+		iCount += 1;
+		spotLights[2].SetPos(posLucesGR_Left[iCount]);
+		iCount += 1;
+
 		//Pender y apagar la linterna (P)
 		if (mainWindow.getOnOff() == 1.0) {
 			shaderList[0].SetSpotLights(spotLights, spotLightCount);
@@ -768,15 +790,15 @@ int main()
 
 		//Muros internos
 		model = modelRot;
-		model = glm::translate(model, glm::vec3(12.0f, 1.5f, 4.0f));
-		model = glm::scale(model, glm::vec3(0.25f, 3.0f, 23.0f));
+		model = glm::translate(model, glm::vec3(12.0f, 1.5f, 4.5f));
+		model = glm::scale(model, glm::vec3(0.25f, 3.0f, 24.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		plainDark.UseTexture();
 		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		meshList[1]->RenderMesh();
 		//Triángulo izq
 		model = modelRot;
-		model = glm::translate(model, glm::vec3(-10.375f, 1.5f, 10.5f));
+		model = glm::translate(model, glm::vec3(-10.375f, 1.5f, 11.5f));
 		model = glm::scale(model, glm::vec3(9.25f, 3.0f, 10.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		plainDark.UseTexture();
@@ -784,7 +806,7 @@ int main()
 		meshList[8]->RenderMesh();
 		//Triángulo der
 		model = modelRot;
-		model = glm::translate(model, glm::vec3(7.375f, 1.5f, 10.5f));
+		model = glm::translate(model, glm::vec3(7.375f, 1.5f, 11.5f));
 		model = glm::scale(model, glm::vec3(-9.25f, 3.0f, 10.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		plainDark.UseTexture();
@@ -792,7 +814,6 @@ int main()
 		meshList[8]->RenderMesh();
 
 		//MuroEsquinas superior
-		//model = glm::mat4(1.0);
 		model = modelRot;
 		model = glm::translate(model, glm::vec3(10.0f, 1.5f, -15.0f));
 		model = glm::scale(model, glm::vec3(10.0f, 3.0f, 10.0f));
@@ -813,67 +834,66 @@ int main()
 
 		// Luces Izquierdas
 		model = modelRot;
-		model = glm::translate(model, glm::vec3(-7.0f, 0.0f, 12.0f));
+		model = glm::translate(model, glm::vec3(-7.0f, 0.0f, 13.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Luces.RenderModel();
 
 		model = modelRot;
-		model = glm::translate(model, glm::vec3(-9.0f, 0.0f, 10.0f));
+		model = glm::translate(model, glm::vec3(-9.0f, 0.0f, 11.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Luces.RenderModel();
 
 		model = modelRot;
-		model = glm::translate(model, glm::vec3(-11.0f, 0.0f, 8.0f));
+		model = glm::translate(model, glm::vec3(-11.0f, 0.0f, 9.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Luces.RenderModel();
 
 		model = modelRot;
-		model = glm::translate(model, glm::vec3(-13.0f, 0.0f, 6.0f));
+		model = glm::translate(model, glm::vec3(-13.0f, 0.0f, 7.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Luces.RenderModel();
 
 		model = modelRot;
-		model = glm::translate(model, glm::vec3(-13.0f, 0.0f, 2.0f));
+		model = glm::translate(model, glm::vec3(-13.0f, 0.0f, 3.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Luces.RenderModel();
 
 		model = modelRot;
-		model = glm::translate(model, glm::vec3(-13.0f, 0.0f, -2.0f));
+		model = glm::translate(model, glm::vec3(-13.0f, 0.0f, -1.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Luces.RenderModel();
 
 	    // Luces Derechas
 
 		model = modelRot;
-		model = glm::translate(model, glm::vec3(4.0f, 0.0f, 12.0f));
+		model = glm::translate(model, glm::vec3(4.0f, 0.0f, 13.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Luces.RenderModel();
 
 		model = modelRot;
-		model = glm::translate(model, glm::vec3(6.0f, 0.0f, 10.0f));
+		model = glm::translate(model, glm::vec3(6.0f, 0.0f, 11.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Luces.RenderModel();
 
 		model = modelRot;
-		model = glm::translate(model, glm::vec3(8.0f, 0.0f, 8.0f));
+		model = glm::translate(model, glm::vec3(8.0f, 0.0f, 9.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Luces.RenderModel();
 
 		model = modelRot;
-		model = glm::translate(model, glm::vec3(10.0f, 0.0f, 6.0f));
+		model = glm::translate(model, glm::vec3(10.0f, 0.0f, 7.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Luces.RenderModel();
 
 		model = modelRot;
-		model = glm::translate(model, glm::vec3(10.0f, 0.0f, 2.0f));
+		model = glm::translate(model, glm::vec3(10.0f, 0.0f, 3.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Luces.RenderModel();
 
 		model = modelRot;
-		model = glm::translate(model, glm::vec3(10.0f, 0.0f, -2.0f));
+		model = glm::translate(model, glm::vec3(10.0f, 0.0f, -1.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Luces.RenderModel();
-
 
 
 
@@ -978,9 +998,10 @@ int main()
 
 		/*---------------------------------------CANICA--------------------------------------------*/
 
-		model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(10.0f, 0.0f, -2.0f));
+		model = modelRot;
+		model = glm::translate(model, glm::vec3(13.5f, 1.0f, 15.5f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		plainTexture.UseTexture();
 		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		canica.render(); //Renderiza esfera
 
