@@ -75,6 +75,9 @@ Model MuroEsquinas;
 Model Cono;
 Model Cilindro;
 Model Luces;
+Model Barra_Lateral;
+Model Barra_Inferior;
+
 
 // Declaración de la canica
 Sphere canica = Sphere(1, 20, 20);
@@ -580,6 +583,14 @@ int main()
 	Luces = Model();
 	Luces.LoadModel("Models/luces.obj");
 
+	Barra_Lateral = Model();
+	Barra_Lateral.LoadModel("Models/barra_lateral.obj");
+
+	Barra_Inferior = Model();
+	Barra_Inferior.LoadModel("Models/barra_inferior.obj");
+
+
+
 /*---------------------------------------LUCES--------------------------------------------*/
 
 	//Posición de las verdes y rojas del lado izquierdo
@@ -1004,6 +1015,50 @@ int main()
 		plainTexture.UseTexture();
 		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		canica.render(); //Renderiza esfera
+
+
+		/*---------------------------------------BARRAS--------------------------------------------*/
+
+		// Barra lateral izquierda
+		model = modelRot;
+		model = glm::translate(model, glm::vec3(-10.5f, 1.0f, 6.0f));
+		model = glm::rotate(model, -50 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		plainTexture.UseTexture();
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		Barra_Lateral.RenderModel();
+
+		// Barra lateral derecha
+		model = modelRot;
+		model = glm::translate(model, glm::vec3(8.0f, 1.0f, 6.0f));
+		model = glm::rotate(model, -180 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, 130 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		plainTexture.UseTexture();
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		Barra_Lateral.RenderModel();
+
+		// Barra inferior izquierda
+		model = modelRot;
+		model = glm::translate(model, glm::vec3(-7.0f, 1.0f, 4.0f));
+		model = glm::rotate(model, -50 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		plainTexture.UseTexture();
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		Barra_Inferior.RenderModel();
+
+		// Barra inferior derecha
+		model = modelRot;
+		model = glm::translate(model, glm::vec3(5.0f, 1.0f, 4.0f));
+		model = glm::rotate(model, -180 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, 130 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		plainTexture.UseTexture();
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		Barra_Inferior.RenderModel();
+
+		
+
 
 
 		////Cono
