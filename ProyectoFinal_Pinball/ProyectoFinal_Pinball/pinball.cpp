@@ -590,7 +590,35 @@ int main()
 	Barra_Inferior.LoadModel("Models/barra_inferior.obj");
 
 
+/*---------------------------------------POSICIÓN Y ROTACIÓN DE PERSONAJES--------------------------------------------*/
+	glm::vec3 posNecro[] = {
+		glm::vec3(11.5f, 2.7f, -6.825f),
+		glm::vec3(11.5f, 2.7f, -5.375f),
+		glm::vec3(11.5f, 2.7f, -3.925f),
 
+		glm::vec3(1.45f, 2.7f, -19.5f),
+		glm::vec3(0.0f, 2.7f, -19.5f),
+		glm::vec3(-1.45f, 2.7f, -19.5f),
+
+		glm::vec3(-14.5f, 2.7f, -6.825f),
+		glm::vec3(-14.5f, 2.7f, -5.375f),
+		glm::vec3(-14.5f, 2.7f, -3.925f),
+	};
+
+	int rotNecro[] = {
+		-90, -90, -90,
+		  0,   0,   0,
+		 90,  90,  90,
+	};
+
+	glm::vec3 posIsaac[] = {
+		glm::vec3(12.5f, 7.5f, -17.5f),
+		glm::vec3(-12.5f, 7.5f, -17.5f),
+	};
+
+	int rotIsaac[] = {
+		-45, 45,
+	};
 /*---------------------------------------LUCES--------------------------------------------*/
 
 	//Posición de las verdes y rojas del lado izquierdo
@@ -601,6 +629,16 @@ int main()
 		glm::vec3(-13.0f, 1.25f, 7.0f),		//V
 		glm::vec3(-13.0f, 1.5f, 3.0f),		//R
 		glm::vec3(-13.0f, 1.75f, -1.0f),	//V	
+	};
+
+	//Posición de las verdes y rojas del lado derecho
+	glm::vec3 posLucesGR_Right[] = {
+		glm::vec3(4.0f, 1.0f, 13.0f),		//R
+		glm::vec3(6.0f, 1.0f, 11.0f),		//V
+		glm::vec3(8.0f, 1.0f, 9.0f),		//R
+		glm::vec3(10.0f, 1.25f, 7.0f),		//V
+		glm::vec3(10.0f, 1.5f, 3.0f),		//R
+		glm::vec3(10.0f, 1.75f, -1.0f),		//V	
 	};
 
 	//luz direccional, sólo 1 y siempre debe de existir
@@ -646,8 +684,24 @@ int main()
 		15.0f);									//Edg
 	spotLightCount++;
 
+	spotLights[3] = SpotLight(1.0f, 0.0f, 0.0f,	//Color ROJO
+		0.0f, 2.0f,								//Intensity
+		4.0f, 1.0f, 13.0f,						//Pos
+		0.0f, -1.0f, 0.0f,						//Dir
+		1.0f, 0.0f, 0.0f,						//con, lin, exp
+		15.0f);									//Edg
+	spotLightCount++;
+
+	spotLights[4] = SpotLight(0.0f, 1.0f, 0.0f,	//Color VERDE
+		0.0f, 2.0f,								//Intensity
+		6.0f, 1.0f, 11.0f,						//Pos
+		0.0f, -1.0f, 0.0f,						//Dir
+		1.0f, 0.0f, 0.0f,						//con, lin, exp
+		15.0f);									//Edg
+	spotLightCount++;
+
 	//linterna
-	spotLights[3] = SpotLight(1.0f, 1.0f, 1.0f,	//Color
+	spotLights[5] = SpotLight(1.0f, 1.0f, 1.0f,	//Color
 		0.0f, 2.0f,								//Intensity
 		0.0f, 0.0f, 0.0f,						//Pos
 		0.0f, -1.0f, 0.0f,						//Dir
@@ -721,7 +775,7 @@ int main()
 		//Asociamos la cámara con la luz de la linterna
 		glm::vec3 lowerLight = camera.getCameraPosition();
 		lowerLight.y -= 0.3f;
-		spotLights[3].SetFlash(lowerLight, camera.getCameraDirection());
+		spotLights[5].SetFlash(lowerLight, camera.getCameraDirection());
 
 		//Cargamos la luces al shader
 		shaderList[0].SetDirectionalLight(&mainLight);
@@ -731,8 +785,10 @@ int main()
 		//Control de las luces verdes y rojas lado izquierdo
 		if (iCount > 5) { iCount = 0; }
 		spotLights[1].SetPos(posLucesGR_Left[iCount]);
+		spotLights[3].SetPos(posLucesGR_Right[iCount]);
 		iCount += 1;
 		spotLights[2].SetPos(posLucesGR_Left[iCount]);
+		spotLights[4].SetPos(posLucesGR_Right[iCount]);
 		iCount += 1;
 
 		//Pender y apagar la linterna (P)
@@ -752,6 +808,7 @@ int main()
 		/*-------------------------------------------------------------------------------------------*/
 		glm::mat4 model(1.0);
 		glm::mat4 modelRot(1.0);
+		glm::mat4 modelTemp(1.0);
 
 		/*---------------------------------------Plano--------------------------------------------*/
 		//Plano base
@@ -876,7 +933,7 @@ int main()
 
 	    // Luces Derechas
 
-		model = modelRot;
+		model = modelRot; 
 		model = glm::translate(model, glm::vec3(4.0f, 0.0f, 13.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Luces.RenderModel();
@@ -909,103 +966,110 @@ int main()
 
 
 		/*---------------------------------------PERSONAJES--------------------------------------------*/
+		for (unsigned int i = 0; i < 2; i++)
+		{
 
-		//Head Isaac
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f, 10.0f, 0.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Isaac.UseTexture();
-		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		meshList[2]->RenderMesh();
-		//Body Isaac
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f, 8.5f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.0f, 2.0f, 0.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Isaac.UseTexture();
-		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		meshList[3]->RenderMesh();
-		//ArmL Isaac
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.7f, 8.5f, 0.0f));
-		model = glm::scale(model, glm::vec3(0.4f, 2.0f, 0.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Isaac.UseTexture();
-		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		meshList[4]->RenderMesh();
-		//ArmR Isaac
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-0.7f, 8.5f, 0.0f));
-		model = glm::scale(model, glm::vec3(0.4f, 2.0f, 0.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Isaac.UseTexture();
-		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		meshList[5]->RenderMesh();
-		//LegL Isaac
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-0.25f, 6.5f, 0.0f));
-		model = glm::scale(model, glm::vec3(0.5f, 2.0f, 0.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Isaac.UseTexture();
-		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		meshList[6]->RenderMesh();
-		//LegR Isaac
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.25f, 6.5f, 0.0f));
-		model = glm::scale(model, glm::vec3(0.5f, 2.0f, 0.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Isaac.UseTexture();
-		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		meshList[7]->RenderMesh();
+			//Head Isaac
+			model = modelRot;
+			model = glm::translate(model, posIsaac[i]);
+			model = glm::rotate(model, rotIsaac[i] * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			Isaac.UseTexture();
+			Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+			meshList[2]->RenderMesh();
+			//Body Isaac
+			modelTemp = model = glm::translate(model, glm::vec3(0.0f, -1.5f, 0.0f));
+			model = glm::scale(model, glm::vec3(1.0f, 2.0f, 0.5f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			Isaac.UseTexture();
+			Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+			meshList[3]->RenderMesh();
+			//ArmL Isaac
+			model = modelTemp;
+			model = glm::translate(model, glm::vec3(0.7f, 0.0f, 0.0f));
+			model = glm::scale(model, glm::vec3(0.4f, 2.0f, 0.5f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			Isaac.UseTexture();
+			Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+			meshList[4]->RenderMesh();
+			//ArmR Isaac
+			model = modelTemp;
+			model = glm::translate(model, glm::vec3(-0.7f, 0.0f, 0.0f));
+			model = glm::scale(model, glm::vec3(0.4f, 2.0f, 0.5f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			Isaac.UseTexture();
+			Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+			meshList[5]->RenderMesh();
+			//LegL Isaac
+			model = modelTemp;
+			model = glm::translate(model, glm::vec3(-0.25f, -2.0f, 0.0f));
+			model = glm::scale(model, glm::vec3(0.5f, 2.0f, 0.5f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			Isaac.UseTexture();
+			Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+			meshList[6]->RenderMesh();
+			//LegR Isaac
+			model = modelTemp;
+			model = glm::translate(model, glm::vec3(0.25f, -2.0f, 0.0f));
+			model = glm::scale(model, glm::vec3(0.5f, 2.0f, 0.5f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			Isaac.UseTexture();
+			Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+			meshList[7]->RenderMesh();
+		}
 
-		//Head Necromorph
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(3.0f, 10.0f, 0.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Necromorph.UseTexture();
-		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		meshList[2]->RenderMesh();
-		//Body Necromorph
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(3.0f, 8.5f, 0.0f));
-		model = glm::scale(model, glm::vec3(1.0f, 2.0f, 0.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Necromorph.UseTexture();
-		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		meshList[3]->RenderMesh();
-		//ArmL Necromorph
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(3.7f, 8.5f, 0.0f));
-		model = glm::scale(model, glm::vec3(0.4f, 2.0f, 0.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Necromorph.UseTexture();
-		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		meshList[4]->RenderMesh();
-		//ArmR Necromorph
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(2.3f, 8.5f, 0.0f));
-		model = glm::scale(model, glm::vec3(0.4f, 2.0f, 0.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Necromorph.UseTexture();
-		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		meshList[5]->RenderMesh();
-		//LegL Necromorph
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(2.75f, 6.5f, 0.0f));
-		model = glm::scale(model, glm::vec3(0.5f, 2.0f, 0.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Necromorph.UseTexture();
-		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		meshList[6]->RenderMesh();
-		//LegR Necromorph
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(3.25f, 6.5f, 0.0f));
-		model = glm::scale(model, glm::vec3(0.5f, 2.0f, 0.5f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Necromorph.UseTexture();
-		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		meshList[7]->RenderMesh();
-
+		for (unsigned int i = 0; i < 9; i++)
+		{
+			//Head Necromorph
+			model = modelRot;
+			model = glm::translate(model, posNecro[i]);
+			//model = glm::translate(model, glm::vec3(11.5f, 2.7f, -6.825f));
+			model = glm::rotate(model, rotNecro[i] * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+			model = glm::scale(model, glm::vec3(0.75f, 0.6f, 0.75f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			Necromorph.UseTexture();
+			Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+			meshList[2]->RenderMesh();
+			//Body Necromorph
+			modelTemp = model = glm::translate(model, glm::vec3(0.0f, -1.5f, 0.0f));
+			model = glm::scale(model, glm::vec3(1.0f, 2.0f, 0.5f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			Necromorph.UseTexture();
+			Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+			meshList[3]->RenderMesh();
+			//ArmL Necromorph
+			model = modelTemp;
+			model = glm::translate(model, glm::vec3(0.7f, 0.0f, 0.0f));
+			model = glm::scale(model, glm::vec3(0.4f, 2.0f, 0.5f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			Necromorph.UseTexture();
+			Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+			meshList[4]->RenderMesh();
+			//ArmR Necromorph
+			model = modelTemp;
+			model = glm::translate(model, glm::vec3(-0.7f, 0.0f, 0.0f));
+			model = glm::scale(model, glm::vec3(0.4f, 2.0f, 0.5f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			Necromorph.UseTexture();
+			Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+			meshList[5]->RenderMesh();
+			//LegL Necromorph
+			model = modelTemp;
+			model = glm::translate(model, glm::vec3(-0.25f, -2.0f, 0.0f));
+			model = glm::scale(model, glm::vec3(0.5f, 2.0f, 0.5f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			Necromorph.UseTexture();
+			Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+			meshList[6]->RenderMesh();
+			//LegR Necromorph
+			model = modelTemp;
+			model = glm::translate(model, glm::vec3(0.25f, -2.0f, 0.0f));
+			model = glm::scale(model, glm::vec3(0.5f, 2.0f, 0.5f));
+			glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+			Necromorph.UseTexture();
+			Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+			meshList[7]->RenderMesh();
+		}
 
 		/*---------------------------------------CANICA--------------------------------------------*/
 
