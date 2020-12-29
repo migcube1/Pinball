@@ -15,6 +15,7 @@ Window::Window(GLint windowWidth, GLint windowHeight)
 	height = windowHeight;
 	muevex = 2.0f;
 	OnOff = 0.0f; //Off
+	Paletas = 25.0f; //Desactivada
 	for (size_t i = 0; i < 1024; i++)
 	{
 		keys[i] = 0;
@@ -120,6 +121,14 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 	}
 	else if (action == GLFW_PRESS && key == GLFW_KEY_P && theWindow->OnOff == 0.0) {
 		theWindow->OnOff = 1.0;
+	}
+
+	if (action == GLFW_PRESS && key == GLFW_KEY_SPACE)
+	{
+		theWindow->Paletas = -15.0f;
+	}
+	else if (action == GLFW_RELEASE && key == GLFW_KEY_SPACE) {
+		theWindow->Paletas = 25.0f;
 	}
 
 	if (key >= 0 && key < 1024)

@@ -77,6 +77,8 @@ Model Cilindro;
 Model Luces;
 Model Barra_Lateral;
 Model Barra_Inferior;
+Model Barra_Superior;
+Model Paleta;
 
 
 // Declaración de la canica
@@ -589,6 +591,12 @@ int main()
 	Barra_Inferior = Model();
 	Barra_Inferior.LoadModel("Models/barra_inferior.obj");
 
+	Barra_Superior = Model();
+	Barra_Superior.LoadModel("Models/barra_superior.obj");
+
+	Paleta = Model();
+	Paleta.LoadModel("Models/paletas.obj");
+
 
 /*---------------------------------------POSICIÓN Y ROTACIÓN DE PERSONAJES--------------------------------------------*/
 	glm::vec3 posNecro[] = {
@@ -660,8 +668,8 @@ int main()
 
 	//Luz de Paletas inferiores
 	spotLights[0] = SpotLight(1.0f, 0.0f, 1.0f,	//Color ROSA
-		0.0f, 2.0f,								//Intensity
-		0.0f, 2.0f, 16.0f,						//Pos
+		0.0f, 1.0f,								//Intensity
+		0.0f, 2.0f, 11.5f,						//Pos
 		0.0f, 0.0f, -1.0f,						//Dir
 		1.0f, 0.0f, 0.0f,						//con, lin, exp
 		15.0f);									//Edg
@@ -1121,9 +1129,58 @@ int main()
 		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		Barra_Inferior.RenderModel();
 
+		// Barras superiores derechas
+		///1
+		model = modelRot;
+		model = glm::translate(model, glm::vec3(6.0f, 0.0f, -12.5f));
+		model = glm::rotate(model, 30 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Barra_Superior.RenderModel();
+		///2
+		model = modelRot;
+		model = glm::translate(model, glm::vec3(6.0f, 0.0f, -6.5f));
+		model = glm::rotate(model, 30 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Barra_Superior.RenderModel();
+
+		// Barras superiores izquierda
+		///1
+		model = modelRot;
+		model = glm::translate(model, glm::vec3(-7.0f, 0.0f, -12.5f));
+		model = glm::rotate(model, -30 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Barra_Superior.RenderModel();
+		///2
+		model = modelRot;
+		model = glm::translate(model, glm::vec3(-7.0f, 0.0f, -6.5f));
+		model = glm::rotate(model, -30 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Barra_Superior.RenderModel();
 		
+		// Paletas
+		///Izquierda
+		model = modelTemp = modelRot;
+		//model = glm::translate(model, glm::vec3(-3.5f, 0.0f, 12.5f));
+		model = glm::translate(model, glm::vec3(-5.5f, 0.0f, 12.0f));
+		modelTemp = model = glm::rotate(model, -mainWindow.getPaletas() * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));		
+
+		model = modelTemp;
+		model = glm::translate(model, glm::vec3(2.25f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Paleta.RenderModel();
 
 
+		///Derecha
+		model = modelTemp = modelRot;
+		//model = glm::translate(model, glm::vec3(1.0f, 0.0f, 12.5f));
+		model = glm::translate(model, glm::vec3(3.0f, 0.0f, 12.0f));
+		modelTemp = model = glm::rotate(model, mainWindow.getPaletas() * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+
+		model = modelTemp;
+		model = glm::translate(model, glm::vec3(-2.25f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(-1.0f, 1.0f, 1.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Paleta.RenderModel();
 
 		////Cono
 		//model = glm::mat4(1.0);
