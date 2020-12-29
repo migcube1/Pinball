@@ -1,0 +1,17 @@
+# 3ds Max Wavefront OBJ Exporter v0.99 - (c)2007 guruware
+# File Created: 28.12.2020 19:37:52
+
+newmtl Ceramic
+	Kd 0.9572 0.9572 0.9572
+	Ks 0.6000 0.6000 0.6000
+	Tr 0.0000
+	d 1.0000
+	Tf 1.0000 1.0000 1.0000
+	Pr 0.3100
+	Pm 0.0000
+	Pc 1.0000
+	Pcr 0.1200
+	Ni 1.4000
+	Ke 0.0000 0.0000 0.0000
+	illum 2
+	map_Kd barra_superior.png
