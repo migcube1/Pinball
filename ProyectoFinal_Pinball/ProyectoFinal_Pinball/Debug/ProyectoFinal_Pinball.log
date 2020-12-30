@@ -1,5 +1,18 @@
-﻿  pinball.cpp
+﻿  Window.cpp
 d:\fi\pinball\proyectofinal_pinball\proyectofinal_pinball\window.h(12): warning C4244: 'return': conversión de 'GLint' a 'GLfloat'; posible pérdida de datos
 d:\fi\pinball\proyectofinal_pinball\proyectofinal_pinball\window.h(13): warning C4244: 'return': conversión de 'GLint' a 'GLfloat'; posible pérdida de datos
-d:\fi\pinball\proyectofinal_pinball\proyectofinal_pinball\pinball.cpp(693): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+d:\fi\pinball\proyectofinal_pinball\proyectofinal_pinball\window.cpp(155): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+d:\fi\pinball\proyectofinal_pinball\proyectofinal_pinball\window.cpp(156): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+d:\fi\pinball\proyectofinal_pinball\proyectofinal_pinball\window.cpp(160): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+d:\fi\pinball\proyectofinal_pinball\proyectofinal_pinball\window.cpp(161): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+d:\fi\pinball\proyectofinal_pinball\proyectofinal_pinball\window.cpp(163): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+d:\fi\pinball\proyectofinal_pinball\proyectofinal_pinball\window.cpp(164): warning C4244: '=': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+  pinball.cpp
+d:\fi\pinball\proyectofinal_pinball\proyectofinal_pinball\window.h(12): warning C4244: 'return': conversión de 'GLint' a 'GLfloat'; posible pérdida de datos
+d:\fi\pinball\proyectofinal_pinball\proyectofinal_pinball\window.h(13): warning C4244: 'return': conversión de 'GLint' a 'GLfloat'; posible pérdida de datos
+d:\fi\pinball\proyectofinal_pinball\proyectofinal_pinball\pinball.cpp(755): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+  Generando código...
+d:\fi\pinball\proyectofinal_pinball\proyectofinal_pinball\window.cpp(77): warning C4715: 'Window::Initialise': no todas las rutas de acceso de control devuelven un valor
+  LINK : no se encontró D:\FI\Pinball\ProyectoFinal_Pinball\Debug\ProyectoFinal_Pinball.exe o no lo generó el último vínculo incremental; ejecutando vínculo completo
+LINK : warning LNK4098: la biblioteca predeterminada'MSVCRT' entra en conflicto con otras bibliotecas; use la biblioteca /NODEFAULTLIB:biblioteca
   ProyectoFinal_Pinball.vcxproj -> D:\FI\Pinball\ProyectoFinal_Pinball\Debug\ProyectoFinal_Pinball.exe
