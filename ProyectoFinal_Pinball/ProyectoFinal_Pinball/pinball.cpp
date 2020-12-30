@@ -4,7 +4,7 @@
 	LABORATORIO DE COMPUTACIÓN GRÁFICA E INTERACCIÓN HUMANO-COMPUTADORA
 	PROYECTO FINAL "PINBALL"
 	SEMESTRE 2021-1
-	ALUMNOS: 
+	ALUMNOS:
 	 - LEYVA BEJARANO MIGUEL ANGEL
 	 - VELASCO ARCINIEGA ERNESTO
 */
@@ -75,7 +75,8 @@ Model MuroEsquinas;
 Model Cono;
 Model Cilindro;
 Model Luces;
-Model Barra_Lateral;
+Model Barra_Lateral_Izq;
+Model Barra_Lateral_Der;
 Model Barra_Inferior;
 Model Barra_Superior;
 Model Paleta;
@@ -98,8 +99,8 @@ static const char* vShader = "shaders/shader_light.vert";
 static const char* fShader = "shaders/shader_light.frag";
 
 //cálculo del promedio de las normales para sombreado de Phong
-void calcAverageNormals(unsigned int * indices, unsigned int indiceCount, GLfloat * vertices, unsigned int verticeCount, 
-						unsigned int vLength, unsigned int normalOffset)
+void calcAverageNormals(unsigned int * indices, unsigned int indiceCount, GLfloat * vertices, unsigned int verticeCount,
+	unsigned int vLength, unsigned int normalOffset)
 {
 	for (size_t i = 0; i < indiceCount; i += 3)
 	{
@@ -110,7 +111,7 @@ void calcAverageNormals(unsigned int * indices, unsigned int indiceCount, GLfloa
 		glm::vec3 v2(vertices[in2] - vertices[in0], vertices[in2 + 1] - vertices[in0 + 1], vertices[in2 + 2] - vertices[in0 + 2]);
 		glm::vec3 normal = glm::cross(v1, v2);
 		normal = glm::normalize(normal);
-		
+
 		in0 += normalOffset; in1 += normalOffset; in2 += normalOffset;
 		vertices[in0] += normal.x; vertices[in0 + 1] += normal.y; vertices[in0 + 2] += normal.z;
 		vertices[in1] += normal.x; vertices[in1 + 1] += normal.y; vertices[in1 + 2] += normal.z;
@@ -126,7 +127,7 @@ void calcAverageNormals(unsigned int * indices, unsigned int indiceCount, GLfloa
 	}
 }
 
-void CreateObjects() 
+void CreateObjects()
 {
 	unsigned int floorIndices[] = {
 		0, 1, 2,
@@ -213,7 +214,7 @@ void CrearCubo()
 		 -0.5f, 0.5f,  -0.5f,	0.0f,	1.0f,		0.0f,	-1.0f,	0.0f,
 
 	};
-	
+
 	Mesh *cubo = new Mesh();
 	cubo->CreateMesh(cubo_vertices, cubo_indices, 192, 36);
 	meshList.push_back(cubo);
@@ -259,10 +260,10 @@ void CrearPrisma()
 		-0.5f, -0.5f,  -0.5f,	0.0f,	1.0f,		0.0f,	1.0f,	0.0f,
 		-0.5f, -0.5f,  0.5f,	0.0f,	0.0f,		0.0f,	1.0f,	0.0f,
 		 0.5f,  -0.5f,  0.5f,	1.0f,	1.0f,		0.0f,	1.0f,	0.0f,
-		//UP
-		 -0.5f, 0.5f,  -0.5f,	0.0f,	1.0f,		0.0f,	-1.0f,	0.0f,
-		 -0.5f, 0.5f,  0.5f,	0.0f,	0.0f,		0.0f,	-1.0f,	0.0f,
-		  0.5f, 0.5f,  0.5f,	1.0f,	1.0f,		0.0f,	-1.0f,	0.0f,
+		 //UP
+		  -0.5f, 0.5f,  -0.5f,	0.0f,	1.0f,		0.0f,	-1.0f,	0.0f,
+		  -0.5f, 0.5f,  0.5f,	0.0f,	0.0f,		0.0f,	-1.0f,	0.0f,
+		   0.5f, 0.5f,  0.5f,	1.0f,	1.0f,		0.0f,	-1.0f,	0.0f,
 
 	};
 
@@ -512,8 +513,8 @@ void CrearPersonajes()
 
 	Mesh *armR = new Mesh();
 	armR->CreateMesh(armR_vertices, cubos_indices, 192, 36);
-	meshList.push_back(armR); 
-	
+	meshList.push_back(armR);
+
 	Mesh *legL = new Mesh();
 	legL->CreateMesh(legL_vertices, cubos_indices, 192, 36);
 	meshList.push_back(legL);
@@ -530,7 +531,7 @@ void CreateShaders()
 	shaderList.push_back(*shader1);
 }
 
-int main() 
+int main()
 {
 	mainWindow = Window(1366, 768); // 1280, 1024 or 1024, 768
 	mainWindow.Initialise();
@@ -543,15 +544,15 @@ int main()
 
 	//Contador para las luces
 	int iCount = 2;
-	
+
 	canica.init();
 	canica.load();
 
-/*----------------------------POS Y CONFIG DE LA CAMARA----------------------------------*/
-							//pos					Up							Yaw		Pitch  Mspeed Tspeed
+	/*----------------------------POS Y CONFIG DE LA CAMARA----------------------------------*/
+								//pos					Up							Yaw		Pitch  Mspeed Tspeed
 	camera = Camera(glm::vec3(0.0f, 10.0f, 20.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 7.0f, 0.7f);
 
-/*------------------------------------TEXTURAS-------------------------------------------*/
+	/*------------------------------------TEXTURAS-------------------------------------------*/
 
 
 	plainTexture = Texture("Textures/plain.png");
@@ -572,7 +573,7 @@ int main()
 	Material_brillante = Material(4.0f, 256);
 	Material_opaco = Material(0.3f, 4);
 
-/*------------------------------------MODELOS--------------------------------------------*/
+	/*------------------------------------MODELOS--------------------------------------------*/
 	MuroEsquinas = Model();
 	MuroEsquinas.LoadModel("Models/muroEsquina.obj");
 
@@ -585,8 +586,11 @@ int main()
 	Luces = Model();
 	Luces.LoadModel("Models/luces.obj");
 
-	Barra_Lateral = Model();
-	Barra_Lateral.LoadModel("Models/barra_lateral.obj");
+	Barra_Lateral_Izq = Model();
+	Barra_Lateral_Izq.LoadModel("Models/barra_lateral_izq.obj");
+
+	Barra_Lateral_Der = Model();
+	Barra_Lateral_Der.LoadModel("Models/barra_lateral_der.obj");
 
 	Barra_Inferior = Model();
 	Barra_Inferior.LoadModel("Models/barra_inferior.obj");
@@ -598,7 +602,7 @@ int main()
 	Paleta.LoadModel("Models/paletas.obj");
 
 
-/*---------------------------------------POSICIÓN Y ROTACIÓN DE PERSONAJES--------------------------------------------*/
+	/*---------------------------------------POSICIÓN Y ROTACIÓN DE PERSONAJES--------------------------------------------*/
 	glm::vec3 posNecro[] = {
 		glm::vec3(11.5f, 2.7f, -6.825f),
 		glm::vec3(11.5f, 2.7f, -5.375f),
@@ -627,9 +631,9 @@ int main()
 	int rotIsaac[] = {
 		-45, 45,
 	};
-/*---------------------------------------LUCES--------------------------------------------*/
+	/*---------------------------------------LUCES--------------------------------------------*/
 
-	//Posición de las verdes y rojas del lado izquierdo
+		//Posición de las verdes y rojas del lado izquierdo
 	glm::vec3 posLucesGR_Left[] = {
 		glm::vec3(-7.0f, 1.0f, 13.0f),		//R
 		glm::vec3(-9.0f, 1.0f, 11.0f),		//V
@@ -650,9 +654,9 @@ int main()
 	};
 
 	//luz direccional, sólo 1 y siempre debe de existir
-	mainLight = DirectionalLight(1.0f, 1.0f, 1.0f, 
-								0.5f, 0.5f,
-								0.0f, 0.0f, -1.0f);
+	mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.5f,
+		0.0f, 0.0f, -1.0f);
 	//contador de luces puntuales
 	unsigned int pointLightCount = 0;
 
@@ -663,7 +667,7 @@ int main()
 	//							0.3f, 0.2f, 0.1f);  // con, lin, exp
 	//pointLightCount++;
 
-	
+
 	unsigned int spotLightCount = 0;
 
 	//Luz de Paletas inferiores
@@ -719,7 +723,7 @@ int main()
 
 
 
-/*---------------------------------------SKYBOX--------------------------------------------*/
+	/*---------------------------------------SKYBOX--------------------------------------------*/
 
 	glm::vec3 posblackhawk = glm::vec3(2.0f, 0.0f, 0.0f);
 
@@ -745,7 +749,7 @@ int main()
 	GLuint uniformProjection = 0, uniformModel = 0, uniformView = 0, uniformEyePosition = 0,
 		uniformSpecularIntensity = 0, uniformShininess = 0;
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 300.0f);
-	
+
 	movCoche = 0.0f;
 	movOffset = 0.5f;
 
@@ -753,9 +757,9 @@ int main()
 	while (!mainWindow.getShouldClose())
 	{
 		GLfloat now = glfwGetTime();
-		deltaTime = now - lastTime; 
+		deltaTime = now - lastTime;
 		lastTime = now;
-		if(movCoche < 5.0f)
+		if (movCoche < 5.0f)
 		{
 			movCoche += movOffset * deltaTime;
 		}
@@ -827,7 +831,7 @@ int main()
 		Portada.UseTexture();
 		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		meshList[0]->RenderMesh();
-		
+
 		/*---------------------------------------MUROS--------------------------------------------*/
 		//Perímetros
 
@@ -939,9 +943,9 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Luces.RenderModel();
 
-	    // Luces Derechas
+		// Luces Derechas
 
-		model = modelRot; 
+		model = modelRot;
 		model = glm::translate(model, glm::vec3(4.0f, 0.0f, 13.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Luces.RenderModel();
@@ -1098,17 +1102,17 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		plainTexture.UseTexture();
 		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		Barra_Lateral.RenderModel();
+		Barra_Lateral_Izq.RenderModel();
 
 		// Barra lateral derecha
 		model = modelRot;
 		model = glm::translate(model, glm::vec3(8.0f, 1.0f, 6.0f));
-		model = glm::rotate(model, -180 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
-		model = glm::rotate(model, 130 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -135 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		plainTexture.UseTexture();
 		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		Barra_Lateral.RenderModel();
+		Barra_Lateral_Der.RenderModel();
+
 
 		// Barra inferior izquierda
 		model = modelRot;
@@ -1156,13 +1160,13 @@ int main()
 		model = glm::rotate(model, -30 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Barra_Superior.RenderModel();
-		
+
 		// Paletas
 		///Izquierda
 		model = modelTemp = modelRot;
 		//model = glm::translate(model, glm::vec3(-3.5f, 0.0f, 12.5f));
 		model = glm::translate(model, glm::vec3(-5.5f, 0.0f, 12.0f));
-		modelTemp = model = glm::rotate(model, -mainWindow.getPaletas() * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));		
+		modelTemp = model = glm::rotate(model, -mainWindow.getPaletas() * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 
 		model = modelTemp;
 		model = glm::translate(model, glm::vec3(2.25f, 0.0f, 0.0f));
