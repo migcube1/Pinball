@@ -72,6 +72,12 @@ glm::vec3 Camera::getCameraPosition()
 	return position;
 }
 
+void Camera::setCameraPosition(glm::vec3 pos)
+{
+	position = pos;
+}
+
+
 
 glm::vec3 Camera::getCameraDirection()
 {

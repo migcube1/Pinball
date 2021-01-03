@@ -16,6 +16,7 @@ Window::Window(GLint windowWidth, GLint windowHeight)
 	muevex = 2.0f;
 	OnOff = 0.0f; //Off
 	Paletas = 25.0f; //Desactivada
+	camaraCanica = GL_FALSE; //Camara de la canica desactivada
 	for (size_t i = 0; i < 1024; i++)
 	{
 		keys[i] = 0;
@@ -130,6 +131,16 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 	else if (action == GLFW_RELEASE && key == GLFW_KEY_SPACE) {
 		theWindow->Paletas = 25.0f;
 	}
+
+	//Cambio de camara de la canica
+	if (action == GLFW_PRESS && key == GLFW_KEY_C && theWindow->camaraCanica == GL_TRUE) {
+		theWindow->camaraCanica = GL_FALSE; //Desactivamos la camara  de la canica
+	}
+	else if (action == GLFW_PRESS && key == GLFW_KEY_C && theWindow->camaraCanica == GL_FALSE) {
+		theWindow->camaraCanica = GL_TRUE;  //Activamos la camara de la canica
+	}
+
+	
 
 	if (key >= 0 && key < 1024)
 	{

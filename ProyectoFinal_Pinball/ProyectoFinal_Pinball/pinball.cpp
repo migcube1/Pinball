@@ -51,6 +51,7 @@ std::vector<Shader> shaderList;
 
 //Declaración de la cámara
 Camera camera;
+Camera camera2;
 
 // Delaración de las Texturas
 Texture plainTexture;
@@ -59,6 +60,7 @@ Texture Portada;
 Texture Isaac;
 Texture Necromorph;
 Texture plainPis;
+Texture metal;
 
 //Declaración de materiales
 Material Material_brillante;
@@ -88,6 +90,7 @@ Model MuroInferior;
 
 // Declaración de la canica
 Sphere canica = Sphere(1, 20, 20);
+glm::vec3 pos_canica = glm::vec3(0.0f, 1.0f, 0.0f);
 
 //Declaración del skybox
 Skybox skybox;
@@ -554,7 +557,8 @@ int main()
 
 	/*----------------------------POS Y CONFIG DE LA CAMARA----------------------------------*/
 								//pos					Up							Yaw		Pitch  Mspeed Tspeed
-	camera = Camera(glm::vec3(0.0f, 10.0f, 20.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 7.0f, 0.7f);
+	camera = Camera(glm::vec3(0.0f, 40.0f, 20.0f), glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 7.0f, 0.7f);
+	camera2 = Camera(pos_canica, glm::vec3(0.0f, 1.0f, 0.0f), -90.0f, 0.0f, 7.0f, 0.7f);
 
 	/*------------------------------------TEXTURAS-------------------------------------------*/
 
@@ -576,6 +580,9 @@ int main()
 
 	plainPis = Texture("Textures/plainPis.png");
 	plainPis.LoadTextureA();
+
+	metal = Texture("Textures/metal.jpg");
+	metal.LoadTextureA();
 
 
 
@@ -783,8 +790,18 @@ int main()
 
 		//Recibir eventos del usuario
 		glfwPollEvents();
-		camera.keyControl(mainWindow.getsKeys(), deltaTime);
-		camera.mouseControl(mainWindow.getXChange(), mainWindow.getYChange());
+
+		if (mainWindow.getCamaraCanica() == GL_TRUE) {  //Camara de canica Activa
+			camera2.keyControl(mainWindow.getsKeys(), deltaTime);
+			camera2.mouseControl(mainWindow.getXChange(), mainWindow.getYChange());
+		}
+		if (mainWindow.getCamaraCanica() == GL_FALSE) { // Camara de tablero activado
+			camera.keyControl(mainWindow.getsKeys(), deltaTime);
+			camera.mouseControl(mainWindow.getXChange(), mainWindow.getYChange());
+		}
+
+		
+		
 
 		// Clear the window
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -829,8 +846,16 @@ int main()
 		}
 
 		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
-		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
-		glUniform3f(uniformEyePosition, camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
+	
+		if (mainWindow.getCamaraCanica() == GL_TRUE) {  //Camara de canica Activa
+			glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera2.calculateViewMatrix()));
+			glUniform3f(uniformEyePosition, camera2.getCameraPosition().x, camera2.getCameraPosition().y, camera2.getCameraPosition().z);
+		}
+		if (mainWindow.getCamaraCanica() == GL_FALSE) { // Camara de tablero activa
+			glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
+			glUniform3f(uniformEyePosition, camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
+		}
+		
 
 		/*-------------------------------------------------------------------------------------------*/
 		/*---------------------------------------DIBUJADO--------------------------------------------*/
@@ -1107,10 +1132,30 @@ int main()
 
 		/*---------------------------------------CANICA--------------------------------------------*/
 
+		//Canica (1) con resorte asociado
 		model = modelRot;
-		model = glm::translate(model, glm::vec3(13.5f, 1.0f, 15.5f));
+		model = glm::translate(model, glm::vec3(13.5f, 1.0f, 15.5f)); 
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		plainPis.UseTexture();
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		canica.render(); //Renderiza esfera
+
+		//Canica (2) con animación asociada
+		model = modelRot;
+		model = glm::translate(model, glm::vec3(0.0f, 1.0f, -7.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		plainPis.UseTexture();
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		canica.render(); //Renderiza esfera
+
+		//Canica (3) con cámara asociada
+		model = modelRot;
+		pos_canica = camera2.getCameraPosition();
+		pos_canica.z -= 5.0f;
+		model = glm::translate(model, pos_canica); 
+		//model = glm::rotate(model, 50 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		metal.UseTexture();
 		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		canica.render(); //Renderiza esfera
 
