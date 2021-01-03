@@ -58,6 +58,7 @@ Texture plainDark;
 Texture Portada;
 Texture Isaac;
 Texture Necromorph;
+Texture plainPis;
 
 //Declaración de materiales
 Material Material_brillante;
@@ -80,6 +81,9 @@ Model Barra_Lateral_Der;
 Model Barra_Inferior;
 Model Barra_Superior;
 Model Paleta;
+Model Resorte;
+Model Palanca;
+Model MuroInferior;
 
 
 // Declaración de la canica
@@ -570,6 +574,11 @@ int main()
 	Necromorph = Texture("Textures/Necromorph.tga");
 	Necromorph.LoadTextureA();
 
+	plainPis = Texture("Textures/plainPis.png");
+	plainPis.LoadTextureA();
+
+
+
 	Material_brillante = Material(4.0f, 256);
 	Material_opaco = Material(0.3f, 4);
 
@@ -598,9 +607,17 @@ int main()
 	Barra_Superior = Model();
 	Barra_Superior.LoadModel("Models/barra_superior.obj");
 
-	Paleta = Model();
-	Paleta.LoadModel("Models/paletas.obj");
+	MuroInferior = Model();
+	MuroInferior.LoadModel("Models/muroInferior.obj");
 
+	Palanca = Model();
+	Palanca.LoadModel("Models/palanca.obj");
+
+	Resorte = Model();
+	Resorte.LoadModel("Models/resorte.obj");
+
+	Paleta = Model();
+	Paleta.LoadModel("Models/paletas.obj"); 
 
 	/*---------------------------------------POSICIÓN Y ROTACIÓN DE PERSONAJES--------------------------------------------*/
 	glm::vec3 posNecro[] = {
@@ -860,13 +877,18 @@ int main()
 		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		meshList[1]->RenderMesh();
 		//Down
-		model = modelRot;
+		/*model = modelRot;
 		model = glm::translate(model, glm::vec3(0.0f, 1.5f, 20.0f));
 		model = glm::scale(model, glm::vec3(30.0f, 3.0f, 0.25f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		plainDark.UseTexture();
 		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		meshList[1]->RenderMesh();
+		meshList[1]->RenderMesh();*/
+		model = modelRot;
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 20.0f));
+		//model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		MuroInferior.RenderModel();
 
 		//Muros internos
 		model = modelRot;
@@ -1088,7 +1110,7 @@ int main()
 		model = modelRot;
 		model = glm::translate(model, glm::vec3(13.5f, 1.0f, 15.5f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		plainTexture.UseTexture();
+		plainPis.UseTexture();
 		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		canica.render(); //Renderiza esfera
 
@@ -1185,6 +1207,21 @@ int main()
 		model = glm::scale(model, glm::vec3(-1.0f, 1.0f, 1.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Paleta.RenderModel();
+
+
+		//Resorte
+		model = modelRot;
+		model = glm::translate(model, glm::vec3(13.5f, 1.0f, 22.5f));
+		//model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Resorte.RenderModel();
+
+		//Palanca
+		model = modelRot;
+		model = glm::translate(model, glm::vec3(13.5f, 1.0f, 22.5f));
+		//model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Palanca.RenderModel();
 
 		////Cono
 		//model = glm::mat4(1.0);
