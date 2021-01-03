@@ -42,7 +42,10 @@
 #include "Sphere.h"
 
 const float toRadians = 3.14159265f / 180.0f;
-float movCoche;
+float movResorte;
+float movPosPalanca;
+float movPosResorte;
+//float movCoche;
 float movOffset;
 bool avanza;
 Window mainWindow;
@@ -85,6 +88,7 @@ Model Barra_Superior;
 Model Paleta;
 Model Resorte;
 Model Palanca;
+Model SoporteResorte;
 Model MuroInferior;
 
 
@@ -626,6 +630,9 @@ int main()
 	Paleta = Model();
 	Paleta.LoadModel("Models/paletas.obj"); 
 
+	SoporteResorte = Model();
+	SoporteResorte.LoadModel("Models/soporteResorte.obj");
+
 	/*---------------------------------------POSICIÓN Y ROTACIÓN DE PERSONAJES--------------------------------------------*/
 	glm::vec3 posNecro[] = {
 		glm::vec3(11.5f, 2.7f, -6.825f),
@@ -774,22 +781,19 @@ int main()
 		uniformSpecularIntensity = 0, uniformShininess = 0;
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 300.0f);
 
-	movCoche = 0.0f;
-	movOffset = 0.5f;
+	movResorte = 1.0f;
+	movPosResorte = 22.5f;
+	movPosPalanca = 22.5f;
+	//movCoche = 0.0f;
+	///Con el Offset se controlará la velocidad del resorte
+	movOffset = 1.5f;
 
 	//Loop mientras no se cierra la ventana
 	while (!mainWindow.getShouldClose())
 	{
-		GLfloat now = glfwGetTime();
-		deltaTime = now - lastTime;
-		lastTime = now;
-		if (movCoche < 5.0f)
-		{
-			movCoche += movOffset * deltaTime;
-		}
-
 		//Recibir eventos del usuario
 		glfwPollEvents();
+
 
 		if (mainWindow.getCamaraCanica() == GL_TRUE) {  //Camara de canica Activa
 			camera2.keyControl(mainWindow.getsKeys(), deltaTime);
@@ -800,8 +804,8 @@ int main()
 			camera.mouseControl(mainWindow.getXChange(), mainWindow.getYChange());
 		}
 
-		
-		
+
+
 
 		// Clear the window
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -846,7 +850,7 @@ int main()
 		}
 
 		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
-	
+
 		if (mainWindow.getCamaraCanica() == GL_TRUE) {  //Camara de canica Activa
 			glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera2.calculateViewMatrix()));
 			glUniform3f(uniformEyePosition, camera2.getCameraPosition().x, camera2.getCameraPosition().y, camera2.getCameraPosition().z);
@@ -855,7 +859,6 @@ int main()
 			glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
 			glUniform3f(uniformEyePosition, camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
 		}
-		
 
 		/*-------------------------------------------------------------------------------------------*/
 		/*---------------------------------------DIBUJADO--------------------------------------------*/
@@ -1134,7 +1137,7 @@ int main()
 
 		//Canica (1) con resorte asociado
 		model = modelRot;
-		model = glm::translate(model, glm::vec3(13.5f, 1.0f, 15.5f)); 
+		model = glm::translate(model, glm::vec3(13.5f, 1.0f, 15.5f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		plainPis.UseTexture();
 		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
@@ -1152,12 +1155,13 @@ int main()
 		model = modelRot;
 		pos_canica = camera2.getCameraPosition();
 		pos_canica.z -= 5.0f;
-		model = glm::translate(model, pos_canica); 
+		model = glm::translate(model, pos_canica);
 		//model = glm::rotate(model, 50 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		metal.UseTexture();
 		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		canica.render(); //Renderiza esfera
+
 
 
 		/*---------------------------------------BARRAS--------------------------------------------*/
@@ -1233,7 +1237,7 @@ int main()
 		model = modelTemp = modelRot;
 		//model = glm::translate(model, glm::vec3(-3.5f, 0.0f, 12.5f));
 		model = glm::translate(model, glm::vec3(-5.5f, 0.0f, 12.0f));
-		modelTemp = model = glm::rotate(model, -mainWindow.getPaletas() * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		modelTemp = model = glm::rotate(model, -mainWindow.getPaletaL() * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 
 		model = modelTemp;
 		model = glm::translate(model, glm::vec3(2.25f, 0.0f, 0.0f));
@@ -1245,7 +1249,7 @@ int main()
 		model = modelTemp = modelRot;
 		//model = glm::translate(model, glm::vec3(1.0f, 0.0f, 12.5f));
 		model = glm::translate(model, glm::vec3(3.0f, 0.0f, 12.0f));
-		modelTemp = model = glm::rotate(model, mainWindow.getPaletas() * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		modelTemp = model = glm::rotate(model, mainWindow.getPaletaR() * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 
 		model = modelTemp;
 		model = glm::translate(model, glm::vec3(-2.25f, 0.0f, 0.0f));
@@ -1253,18 +1257,59 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Paleta.RenderModel();
 
-
-		//Resorte
+		//Soporte del resorte
 		model = modelRot;
 		model = glm::translate(model, glm::vec3(13.5f, 1.0f, 22.5f));
 		//model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		SoporteResorte.RenderModel();
+		
+
+
+		/*---------------------------------------RESORTE--------------------------------------------*/
+
+
+
+		GLfloat now = glfwGetTime();
+		deltaTime = now - lastTime;
+		lastTime = now;
+		
+		model = modelRot;
+		//model = glm::translate(model, glm::vec3(13.5f, 1.0f, 22.5f));
+		//model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		if (mainWindow.getClic() == 1.0f)
+		{	
+			printf("\n%f",movResorte);
+			if (movResorte > 0.35f)
+			{
+				movResorte -= movOffset * deltaTime;
+				movPosResorte -= (movOffset * 2)* deltaTime;
+				movPosPalanca -= (movOffset * 3.5)* deltaTime;
+
+				model = glm::translate(model, glm::vec3(13.5f, 1.0f, movPosResorte));
+				model = glm::scale(model, glm::vec3(1.0f, 1.0f, movResorte));
+			}
+			else
+			{
+				model = glm::translate(model, glm::vec3(13.5f, 1.0f, movPosResorte));
+				model = glm::scale(model, glm::vec3(1.0f, 1.0f, movResorte));
+			}			
+		}
+		else
+		{
+			movResorte = 1.0f;
+			movPosResorte = movPosPalanca = 22.5f;
+			model = glm::translate(model, glm::vec3(13.5f, 1.0f, movPosResorte));
+			model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		}
+
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Resorte.RenderModel();
 
 		//Palanca
 		model = modelRot;
-		model = glm::translate(model, glm::vec3(13.5f, 1.0f, 22.5f));
-		//model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		//model = glm::translate(model, glm::vec3(13.5f, 1.0f, 22.5f));
+		model = glm::translate(model, glm::vec3(13.5f, 1.0f, movPosPalanca));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Palanca.RenderModel();
 

@@ -15,8 +15,10 @@ Window::Window(GLint windowWidth, GLint windowHeight)
 	height = windowHeight;
 	muevex = 2.0f;
 	OnOff = 0.0f; //Off
-	Paletas = 25.0f; //Desactivada
 	camaraCanica = GL_FALSE; //Camara de la canica desactivada
+	PaletaL = 25.0f; //Desactivada
+	PaletaR = 25.0f; //Desactivada
+	clic = 0.0f; //Desactivado
 	for (size_t i = 0; i < 1024; i++)
 	{
 		keys[i] = 0;
@@ -81,6 +83,7 @@ void Window::createCallbacks()
 {
 	glfwSetKeyCallback(mainWindow, ManejaTeclado);
 	glfwSetCursorPosCallback(mainWindow, ManejaMouse);
+	glfwSetMouseButtonCallback(mainWindow, BotonesMouse);
 }
 GLfloat Window::getXChange()
 {
@@ -124,13 +127,21 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 		theWindow->OnOff = 1.0;
 	}
 
-	if (action == GLFW_PRESS && key == GLFW_KEY_SPACE)
+	if (action == GLFW_PRESS && key == GLFW_KEY_Z)
 	{
-		theWindow->Paletas = -15.0f;
+		theWindow->PaletaL = -15.0f;
 	}
-	else if (action == GLFW_RELEASE && key == GLFW_KEY_SPACE) {
-		theWindow->Paletas = 25.0f;
+	else if (action == GLFW_RELEASE && key == GLFW_KEY_Z) {
+		theWindow->PaletaL = 25.0f;
 	}
+	if (action == GLFW_PRESS && key == GLFW_KEY_X)
+	{
+		theWindow->PaletaR = -15.0f;
+	}
+	else if (action == GLFW_RELEASE && key == GLFW_KEY_X) {
+		theWindow->PaletaR = 25.0f;
+	}
+	
 
 	//Cambio de camara de la canica
 	if (action == GLFW_PRESS && key == GLFW_KEY_C && theWindow->camaraCanica == GL_TRUE) {
@@ -140,7 +151,7 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 		theWindow->camaraCanica = GL_TRUE;  //Activamos la camara de la canica
 	}
 
-	
+
 
 	if (key >= 0 && key < 1024)
 	{
@@ -154,6 +165,21 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 			theWindow->keys[key] = false;
 			printf("se solto la tecla %d'\n", key);
 		}
+	}
+}
+
+void Window::BotonesMouse(GLFWwindow* window, int button, int action, int mods)
+{
+	Window* theWindow = static_cast<Window*>(glfwGetWindowUserPointer(window));
+
+	if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
+	{	
+		theWindow->clic = 1.0f;
+		printf("se presiono clic \n");
+	}
+	else 
+	{
+		theWindow->clic = 0.0f;
 	}
 }
 
@@ -173,6 +199,7 @@ void Window::ManejaMouse(GLFWwindow* window, double xPos, double yPos)
 
 	theWindow->lastX = xPos;
 	theWindow->lastY = yPos;
+
 }
 
 

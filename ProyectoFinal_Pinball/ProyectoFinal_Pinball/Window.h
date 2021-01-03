@@ -15,8 +15,10 @@ public:
 	GLfloat getYChange();
 	GLfloat getmuevex() { return muevex; }
 	GLfloat getOnOff() { return OnOff; }
-	GLfloat getPaletas() { return Paletas; }
+	GLfloat getPaletaL() { return PaletaL; }
+	GLfloat getPaletaR() { return PaletaR; }
 	GLboolean getCamaraCanica() { return camaraCanica; }
+	GLfloat getClic() { return clic; }
 	bool getShouldClose() {
 		return  glfwWindowShouldClose(mainWindow);}
 	bool* getsKeys() { return keys; }
@@ -35,11 +37,14 @@ private:
 	GLfloat yChange;
 	GLfloat muevex;
 	GLfloat OnOff;
-	GLfloat Paletas;
+	GLfloat PaletaL;
+	GLfloat PaletaR;
 	GLboolean camaraCanica;
+	GLfloat clic;
 	bool mouseFirstMoved;
 	static void ManejaTeclado(GLFWwindow* window, int key, int code, int action, int mode);
 	static void ManejaMouse(GLFWwindow* window, double xPos, double yPos);
+	static void BotonesMouse(GLFWwindow* window, int button, int action, int mods);
 
 };
 
