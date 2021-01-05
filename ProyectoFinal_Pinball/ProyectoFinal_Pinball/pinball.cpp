@@ -83,7 +83,8 @@ Model Cilindro;
 Model Luces;
 Model Barra_Lateral_Izq;
 Model Barra_Lateral_Der;
-Model Barra_Inferior;
+Model Barra_Inferior_Izq;
+Model Barra_Inferior_Der;
 Model Barra_Superior;
 Model Paleta;
 Model Resorte;
@@ -612,8 +613,11 @@ int main()
 	Barra_Lateral_Der = Model();
 	Barra_Lateral_Der.LoadModel("Models/barra_lateral_der.obj");
 
-	Barra_Inferior = Model();
-	Barra_Inferior.LoadModel("Models/barra_inferior.obj");
+	Barra_Inferior_Izq = Model();
+	Barra_Inferior_Izq.LoadModel("Models/barra_inferior_izq.obj");
+
+	Barra_Inferior_Der = Model();
+	Barra_Inferior_Der.LoadModel("Models/barra_inferior_der.obj");
 
 	Barra_Superior = Model();
 	Barra_Superior.LoadModel("Models/barra_superior.obj");
@@ -1187,22 +1191,21 @@ int main()
 
 		// Barra inferior izquierda
 		model = modelRot;
-		model = glm::translate(model, glm::vec3(-7.0f, 1.0f, 4.0f));
+		model = glm::translate(model, glm::vec3(-6.5f, 1.0f, 4.0f));
 		model = glm::rotate(model, -50 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		plainTexture.UseTexture();
 		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		Barra_Inferior.RenderModel();
+		Barra_Inferior_Izq.RenderModel();
 
 		// Barra inferior derecha
 		model = modelRot;
-		model = glm::translate(model, glm::vec3(5.0f, 1.0f, 4.0f));
-		model = glm::rotate(model, -180 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
-		model = glm::rotate(model, 130 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::translate(model, glm::vec3(4.0f, 1.0f, 4.0f));
+		model = glm::rotate(model, -130 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		plainTexture.UseTexture();
 		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		Barra_Inferior.RenderModel();
+		Barra_Inferior_Der.RenderModel();
 
 		// Barras superiores derechas
 		///1
