@@ -838,9 +838,9 @@ int main()
 		uniformSpecularIntensity = 0, uniformShininess = 0;
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 300.0f);
 
-	movResorte = 1.0f;
-	movPosResorte = 22.5f;
-	movPosPalanca = 22.5f;
+	movResorte = 0.35f;
+	movPosResorte = 22.5;
+	movPosPalanca = 19.0;
 
 
 	//Con el Offset se controlará la velocidad del resorte
@@ -1391,16 +1391,14 @@ int main()
 		lastTime = now;
 		
 		model = modelRot;
-		//model = glm::translate(model, glm::vec3(13.5f, 1.0f, 22.5f));
-		//model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
 		if (mainWindow.getClic() == 1.0f)
 		{	
-			printf("\n%f",movResorte);
-			if (movResorte > 0.35f)
+			//printf("\n%f", movPosPalanca);
+			if (movResorte < 1.275f)
 			{
-				movResorte -= movOffset * deltaTime;
-				movPosResorte -= (movOffset * 2)* deltaTime;
-				movPosPalanca -= (movOffset * 3.5)* deltaTime;
+				movResorte += movOffset * deltaTime;
+				movPosResorte -= movOffset* deltaTime;
+				movPosPalanca += (movOffset * 3.5)* deltaTime;
 
 				model = glm::translate(model, glm::vec3(13.5f, 1.0f, movPosResorte));
 				model = glm::scale(model, glm::vec3(1.0f, 1.0f, movResorte));
@@ -1413,10 +1411,11 @@ int main()
 		}
 		else
 		{
-			movResorte = 1.0f;
-			movPosResorte = movPosPalanca = 22.5f;
+			movResorte = 0.425f;
+			movPosResorte = 20.075f;
+			movPosPalanca = 19.5f;
 			model = glm::translate(model, glm::vec3(13.5f, 1.0f, movPosResorte));
-			model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+			model = glm::scale(model, glm::vec3(1.0f, 1.0f, movResorte));
 		}
 
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -1424,7 +1423,6 @@ int main()
 
 		//Palanca
 		model = modelRot;
-		//model = glm::translate(model, glm::vec3(13.5f, 1.0f, 22.5f));
 		model = glm::translate(model, glm::vec3(13.5f, 1.0f, movPosPalanca));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Palanca.RenderModel();
