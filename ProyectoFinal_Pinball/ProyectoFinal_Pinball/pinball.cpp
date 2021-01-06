@@ -554,9 +554,7 @@ int main()
 	CrearPrisma();
 	CreateShaders();
 
-	//Contador para las luces
-	int iCount = 2;
-
+	// Inializamos y cargamos la geometria de la canica
 	canica.init();
 	canica.load();
 
@@ -666,9 +664,13 @@ int main()
 	int rotIsaac[] = {
 		-45, 45,
 	};
+
 	/*---------------------------------------LUCES--------------------------------------------*/
 
-		//Posición de las verdes y rojas del lado izquierdo
+	//Contador para las luces
+	int iCount = 2;
+
+	//Posición de las verdes y rojas del lado izquierdo
 	glm::vec3 posLucesGR_Left[] = {
 		glm::vec3(-7.0f, 1.0f, 13.0f),		//R
 		glm::vec3(-9.0f, 1.0f, 11.0f),		//V
@@ -687,6 +689,25 @@ int main()
 		glm::vec3(10.0f, 1.5f, 3.0f),		//R
 		glm::vec3(10.0f, 1.75f, -1.0f),		//V	
 	};
+
+	//Posición de las luces amarillas  de lado izquierdo
+	glm::vec3 posLucesRY_Left[]{
+		glm::vec3(-5.0f, 1.25f, 9.0f), //A
+		glm::vec3(-7.0f, 1.25f, 7.0f), //R
+		glm::vec3(-9.0f, 1.25f, 5.0f), //A
+		glm::vec3(-3.0f, 1.25f, 5.0f), //R
+		glm::vec3(-4.0f, 1.25f, 2.0f), //A
+	};
+
+	//Posición de las luces amarillas  de lado derecho
+	glm::vec3 posLucesRY_Right[]{
+		glm::vec3(2.0f, 1.25f, 9.0f), //A
+		glm::vec3(4.0f, 1.25f, 7.0f), //R
+		glm::vec3(6.0f, 1.25f, 5.0f), //A
+		glm::vec3(0.0f, 1.25f, 5.0f), //R
+		glm::vec3(1.0f, 1.25f, 2.0f), //A
+	};
+
 
 	//luz direccional, sólo 1 y siempre debe de existir
 	mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
@@ -747,8 +768,40 @@ int main()
 		15.0f);									//Edg
 	spotLightCount++;
 
+	spotLights[5] = SpotLight(1.0f, 1.0f, 0.0f,	//Color AMARILLO
+		0.0f, 2.0f,								//Intensity
+		6.0f, 1.0f, 11.0f,						//Pos
+		0.0f, -1.0f, 0.0f,						//Dir
+		1.0f, 0.0f, 0.0f,						//con, lin, exp
+		15.0f);									//Edg
+	spotLightCount++;
+
+	spotLights[6] = SpotLight(1.0f, 0.0f, 0.0f,	//Color ROJO
+		0.0f, 2.0f,								//Intensity
+		6.0f, 1.0f, 11.0f,						//Pos
+		0.0f, -1.0f, 0.0f,						//Dir
+		1.0f, 0.0f, 0.0f,						//con, lin, exp
+		15.0f);									//Edg
+	spotLightCount++;
+
+	spotLights[7] = SpotLight(1.0f, 1.0f, 0.0f,	//Color AMARILLO
+		0.0f, 2.0f,								//Intensity
+		6.0f, 1.0f, 11.0f,						//Pos
+		0.0f, -1.0f, 0.0f,						//Dir
+		1.0f, 0.0f, 0.0f,						//con, lin, exp
+		15.0f);									//Edg
+	spotLightCount++;
+
+	spotLights[8] = SpotLight(1.0f, 0.0f, 0.0f,	//Color ROJO
+		0.0f, 2.0f,								//Intensity
+		6.0f, 1.0f, 11.0f,						//Pos
+		0.0f, -1.0f, 0.0f,						//Dir
+		1.0f, 0.0f, 0.0f,						//con, lin, exp
+		15.0f);									//Edg
+	spotLightCount++;
+
 	//linterna
-	spotLights[5] = SpotLight(1.0f, 1.0f, 1.0f,	//Color
+	spotLights[9] = SpotLight(1.0f, 1.0f, 1.0f,	//Color
 		0.0f, 2.0f,								//Intensity
 		0.0f, 0.0f, 0.0f,						//Pos
 		0.0f, -1.0f, 0.0f,						//Dir
@@ -788,8 +841,9 @@ int main()
 	movResorte = 1.0f;
 	movPosResorte = 22.5f;
 	movPosPalanca = 22.5f;
-	//movCoche = 0.0f;
-	///Con el Offset se controlará la velocidad del resorte
+
+
+	//Con el Offset se controlará la velocidad del resorte
 	movOffset = 1.5f;
 
 	//Loop mientras no se cierra la ventana
@@ -798,7 +852,7 @@ int main()
 		//Recibir eventos del usuario
 		glfwPollEvents();
 
-
+		// Control de teclado para el cambio de cámara
 		if (mainWindow.getCamaraCanica() == GL_TRUE) {  //Camara de canica Activa
 			camera2.keyControl(mainWindow.getsKeys(), deltaTime);
 			camera2.mouseControl(mainWindow.getXChange(), mainWindow.getYChange());
@@ -807,9 +861,6 @@ int main()
 			camera.keyControl(mainWindow.getsKeys(), deltaTime);
 			camera.mouseControl(mainWindow.getXChange(), mainWindow.getYChange());
 		}
-
-
-
 
 		// Clear the window
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -829,20 +880,30 @@ int main()
 		//Asociamos la cámara con la luz de la linterna
 		glm::vec3 lowerLight = camera.getCameraPosition();
 		lowerLight.y -= 0.3f;
-		spotLights[5].SetFlash(lowerLight, camera.getCameraDirection());
+		spotLights[9].SetFlash(lowerLight, camera.getCameraDirection());
 
 		//Cargamos la luces al shader
 		shaderList[0].SetDirectionalLight(&mainLight);
 		shaderList[0].SetPointLights(pointLights, pointLightCount);
 		shaderList[0].SetSpotLights(spotLights, spotLightCount);
 
-		//Control de las luces verdes y rojas lado izquierdo
+		//Control de las luces verdes, rojas y amarillas 
 		if (iCount > 5) { iCount = 0; }
+
+		// Rojas
 		spotLights[1].SetPos(posLucesGR_Left[iCount]);
 		spotLights[3].SetPos(posLucesGR_Right[iCount]);
+		// Amarillas
+		spotLights[5].SetPos(posLucesRY_Left[iCount]);
+		spotLights[7].SetPos(posLucesRY_Right[iCount]);
 		iCount += 1;
+
+		//Verdes
 		spotLights[2].SetPos(posLucesGR_Left[iCount]);
 		spotLights[4].SetPos(posLucesGR_Right[iCount]);
+		//Rojas
+		spotLights[6].SetPos(posLucesRY_Left[iCount]);
+		spotLights[8].SetPos(posLucesRY_Right[iCount]);
 		iCount += 1;
 
 		//Pender y apagar la linterna (P)
@@ -855,6 +916,7 @@ int main()
 
 		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
 
+		// Control para el cambio de cámara
 		if (mainWindow.getCamaraCanica() == GL_TRUE) {  //Camara de canica Activa
 			glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera2.calculateViewMatrix()));
 			glUniform3f(uniformEyePosition, camera2.getCameraPosition().x, camera2.getCameraPosition().y, camera2.getCameraPosition().z);
@@ -966,7 +1028,7 @@ int main()
 
 		/*---------------------------------------LUCES--------------------------------------------*/
 
-		// Luces Izquierdas
+		// Luces rojas y verdes Izquierdas
 		model = modelRot;
 		model = glm::translate(model, glm::vec3(-7.0f, 0.0f, 13.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -997,8 +1059,7 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Luces.RenderModel();
 
-		// Luces Derechas
-
+		// Luces rojas y verdes Derechas
 		model = modelRot;
 		model = glm::translate(model, glm::vec3(4.0f, 0.0f, 13.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -1029,6 +1090,58 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Luces.RenderModel();
 
+		// Luces amarillas izquierdas
+		model = modelRot;
+		model = glm::translate(model, glm::vec3(-5.0f, 0.0f, 9.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Luces.RenderModel();
+		
+		model = modelRot;
+		model = glm::translate(model, glm::vec3(-7.0f, 0.0f, 7.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Luces.RenderModel();
+
+		model = modelRot;
+		model = glm::translate(model, glm::vec3(-9.0f, 0.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Luces.RenderModel();
+
+		model = modelRot;
+		model = glm::translate(model, glm::vec3(-3.0f, 0.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Luces.RenderModel();
+
+		model = modelRot;
+		model = glm::translate(model, glm::vec3(-4.0f, 0.0f, 2.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Luces.RenderModel();
+
+
+		// Luces amarillas derechas
+		model = modelRot;
+		model = glm::translate(model, glm::vec3(2.0f, 0.0f, 9.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Luces.RenderModel();
+
+		model = modelRot;
+		model = glm::translate(model, glm::vec3(4.0f, 0.0f, 7.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Luces.RenderModel();
+
+		model = modelRot;
+		model = glm::translate(model, glm::vec3(6.0f, 0.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Luces.RenderModel();
+
+		model = modelRot;
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Luces.RenderModel();
+
+		model = modelRot;
+		model = glm::translate(model, glm::vec3(1.0f, 0.0f, 2.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Luces.RenderModel();
 
 
 		/*---------------------------------------PERSONAJES--------------------------------------------*/
