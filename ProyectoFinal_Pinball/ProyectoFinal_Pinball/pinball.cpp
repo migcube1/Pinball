@@ -95,7 +95,7 @@ Model MuroInferior;
 
 // Declaración de la canica
 Sphere canica = Sphere(1, 20, 20);
-glm::vec3 pos_canica = glm::vec3(0.0f, 1.0f, 0.0f);
+glm::vec3 pos_canica = glm::vec3(0.0f, 1.5, 0.0f);
 
 //Declaración del skybox
 Skybox skybox;
@@ -1271,13 +1271,15 @@ int main()
 		//Canica (3) con cámara asociada
 		model = modelRot;
 		pos_canica = camera2.getCameraPosition();
-		pos_canica.z -= 5.0f;
+		//pos_canica.y = 1.5f;
 		model = glm::translate(model, pos_canica);
 		//model = glm::rotate(model, 50 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		metal.UseTexture();
 		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		canica.render(); //Renderiza esfera
+		//Este if servirá para renderizar o no la canica si estamos usando su vista
+		if (mainWindow.getCamaraCanica() == GL_FALSE)  //Camara de canica Activa
+			canica.render(); //Renderiza esfera
 
 
 
@@ -1314,11 +1316,14 @@ int main()
 		// Barra inferior derecha
 		model = modelRot;
 		model = glm::translate(model, glm::vec3(4.0f, 1.0f, 4.0f));
-		model = glm::rotate(model, -130 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		//model = glm::rotate(model, -130 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(-1.0f, 1.0f, 1.0f));
+		model = glm::rotate(model, -50 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		plainTexture.UseTexture();
 		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		Barra_Inferior_Der.RenderModel();
+		Barra_Inferior_Izq.RenderModel();
+		//Barra_Inferior_Der.RenderModel();
 
 		// Barras superiores derechas
 		///1
