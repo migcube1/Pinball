@@ -45,7 +45,7 @@ const float toRadians = 3.14159265f / 180.0f;
 float movResorte;
 float movPosPalanca;
 float movPosResorte;
-//float movCoche;
+float movCanica;
 float movOffset;
 bool avanza;
 Window mainWindow;
@@ -91,11 +91,12 @@ Model Resorte;
 Model Palanca;
 Model SoporteResorte;
 Model MuroInferior;
+Model Caja;
 
 
 // Declaración de la canica
 Sphere canica = Sphere(1, 20, 20);
-glm::vec3 pos_canica = glm::vec3(0.0f, 1.5, 0.0f);
+glm::vec3 pos_canica = glm::vec3(-7.0f, 1.5, 18.0f);
 
 //Declaración del skybox
 Skybox skybox;
@@ -584,10 +585,8 @@ int main()
 	plainPis = Texture("Textures/plainPis.png");
 	plainPis.LoadTextureA();
 
-	metal = Texture("Textures/metal.jpg");
+	metal = Texture("Textures/metal.png");
 	metal.LoadTextureA();
-
-
 
 	Material_brillante = Material(4.0f, 256);
 	Material_opaco = Material(0.3f, 4);
@@ -634,6 +633,9 @@ int main()
 
 	SoporteResorte = Model();
 	SoporteResorte.LoadModel("Models/soporteResorte.obj");
+
+	Caja = Model();
+	Caja.LoadModel("Models/caja.obj");
 
 	/*---------------------------------------POSICIÓN Y ROTACIÓN DE PERSONAJES--------------------------------------------*/
 	glm::vec3 posNecro[] = {
@@ -726,16 +728,16 @@ int main()
 
 	unsigned int spotLightCount = 0;
 
-	//Luz de Paletas inferiores
+	//LUZ DE PALETAS INFERIORES
 	spotLights[0] = SpotLight(1.0f, 0.0f, 1.0f,	//Color ROSA
-		0.0f, 1.0f,								//Intensity
-		0.0f, 2.0f, 11.5f,						//Pos
+		0.0f, 2.0f,								//Intensity
+		-1.5f, 0.0f, 20.0f,						//Pos
 		0.0f, 0.0f, -1.0f,						//Dir
 		1.0f, 0.0f, 0.0f,						//con, lin, exp
-		15.0f);									//Edg
+		20.0f);									//Edg
 	spotLightCount++;
 
-
+	//LUCES DEL TABLERO
 	spotLights[1] = SpotLight(1.0f, 0.0f, 0.0f,	//Color ROJO
 		0.0f, 2.0f,								//Intensity
 		-7.0f, 1.0f, 13.0f,						//Pos
@@ -800,7 +802,17 @@ int main()
 		15.0f);									//Edg
 	spotLightCount++;
 
-	//linterna
+	////LUZ DEL ILUMINA TABLERO
+	//spotLights[9] = SpotLight(1.0f, 1.0f, 1.0f,	//Color
+	//	0.0f, 0.2f,								//Intensity
+	//	0.0f, 200.0f, 0.0f,						//Pos
+	//	0.0f, -1.0f, 0.0f,						//Dir
+	//	1.0f, 0.0f, 0.0f,						//con, lin, exp
+	//	20.0f);									//Edg
+	//spotLightCount++;
+
+
+	//LINTERNA
 	spotLights[9] = SpotLight(1.0f, 1.0f, 1.0f,	//Color
 		0.0f, 2.0f,								//Intensity
 		0.0f, 0.0f, 0.0f,						//Pos
@@ -841,7 +853,7 @@ int main()
 	movResorte = 0.35f;
 	movPosResorte = 22.5;
 	movPosPalanca = 19.0;
-
+	movCanica = 15.5f;
 
 	//Con el Offset se controlará la velocidad del resorte
 	movOffset = 1.5f;
@@ -849,6 +861,8 @@ int main()
 	//Loop mientras no se cierra la ventana
 	while (!mainWindow.getShouldClose())
 	{
+
+		
 		//Recibir eventos del usuario
 		glfwPollEvents();
 
@@ -1252,26 +1266,26 @@ int main()
 
 		/*---------------------------------------CANICA--------------------------------------------*/
 
+	
 		//Canica (1) con resorte asociado
 		model = modelRot;
-		model = glm::translate(model, glm::vec3(13.5f, 1.0f, 15.5f));
+		model = glm::translate(model, glm::vec3(13.5f, 1.0f, movCanica));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		plainPis.UseTexture();
+		metal.UseTexture();
 		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		canica.render(); //Renderiza esfera
 
 		//Canica (2) con animación asociada
 		model = modelRot;
-		model = glm::translate(model, glm::vec3(0.0f, 1.0f, -7.0f));
+		model = glm::translate(model, glm::vec3(0.0f, 1.0f, -13.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		plainPis.UseTexture();
+		metal.UseTexture();
 		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		canica.render(); //Renderiza esfera
 
 		//Canica (3) con cámara asociada
 		model = modelRot;
 		pos_canica = camera2.getCameraPosition();
-		//pos_canica.y = 1.5f;
 		model = glm::translate(model, pos_canica);
 		//model = glm::rotate(model, 50 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -1385,11 +1399,33 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		SoporteResorte.RenderModel();
 		
+		/*---------------------------------------CAJAS--------------------------------------------*/
 
+		// CAJA CENTRAL 
+		model = modelRot;
+		model = glm::translate(model, glm::vec3(-1.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		plainTexture.UseTexture();
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		Caja.RenderModel();
+
+		//CAJA DERECHA
+		model = modelRot;
+		model = glm::translate(model, glm::vec3(7.0f, 1.0f, -17.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		plainTexture.UseTexture();
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		Caja.RenderModel();
+
+		//CAJA IZQUIERDA
+		model = modelRot;
+		model = glm::translate(model, glm::vec3(-7.0f, 1.0f, -17.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		plainTexture.UseTexture();
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		Caja.RenderModel();
 
 		/*---------------------------------------RESORTE--------------------------------------------*/
-
-
 
 		GLfloat now = glfwGetTime();
 		deltaTime = now - lastTime;
@@ -1432,20 +1468,7 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Palanca.RenderModel();
 
-		////Cono
-		//model = glm::mat4(1.0);
-		//model = glm::translate(model, glm::vec3(-2.0f, -1.4f, -0.15f));
-		//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		//Cono.RenderModel();
 
-		////Cilindro
-		//model = glm::mat4(1.0);
-		//model = glm::translate(model, glm::vec3(-4.0f, -1.4f, -0.15f));
-		//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		/////dirtTexture.UseTexture();
-		//Cilindro.RenderModel();
 
 
 		glUseProgram(0);

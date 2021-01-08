@@ -1,15 +1,1 @@
-﻿  Shader_light.cpp
-d:\fi\pinball\proyectofinal_pinball\proyectofinal_pinball\shader_light.cpp(202): warning C4244: 'argumento': conversión de 'GLuint' a 'GLfloat'; posible pérdida de datos
-d:\fi\pinball\proyectofinal_pinball\proyectofinal_pinball\shader_light.cpp(201): warning C4244: 'argumento': conversión de 'GLuint' a 'GLfloat'; posible pérdida de datos
-d:\fi\pinball\proyectofinal_pinball\proyectofinal_pinball\shader_light.cpp(215): warning C4244: 'argumento': conversión de 'GLuint' a 'GLfloat'; posible pérdida de datos
-d:\fi\pinball\proyectofinal_pinball\proyectofinal_pinball\shader_light.cpp(214): warning C4244: 'argumento': conversión de 'GLuint' a 'GLfloat'; posible pérdida de datos
-d:\fi\pinball\proyectofinal_pinball\proyectofinal_pinball\shader_light.cpp(213): warning C4244: 'argumento': conversión de 'GLuint' a 'GLfloat'; posible pérdida de datos
-  Skybox.cpp
-  Texture.cpp
-  pinball.cpp
-d:\fi\pinball\proyectofinal_pinball\proyectofinal_pinball\window.h(12): warning C4244: 'return': conversión de 'GLint' a 'GLfloat'; posible pérdida de datos
-d:\fi\pinball\proyectofinal_pinball\proyectofinal_pinball\window.h(13): warning C4244: 'return': conversión de 'GLint' a 'GLfloat'; posible pérdida de datos
-d:\fi\pinball\proyectofinal_pinball\proyectofinal_pinball\pinball.cpp(1389): warning C4244: 'inicializando': conversión de 'double' a 'GLfloat'; posible pérdida de datos
-d:\fi\pinball\proyectofinal_pinball\proyectofinal_pinball\pinball.cpp(1403): warning C4244: '-=': conversión de 'double' a 'float'; posible pérdida de datos
-  Generando código...
-  ProyectoFinal_Pinball.vcxproj -> D:\FI\Pinball\ProyectoFinal_Pinball\Debug\ProyectoFinal_Pinball.exe
+﻿
