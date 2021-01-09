@@ -92,6 +92,7 @@ Model Palanca;
 Model SoporteResorte;
 Model MuroInferior;
 Model Caja;
+Model Flecha_Detalle;
 
 
 // Declaración de la canica
@@ -637,6 +638,9 @@ int main()
 	Caja = Model();
 	Caja.LoadModel("Models/caja.obj");
 
+	Flecha_Detalle = Model();
+	Flecha_Detalle.LoadModel("Models/Flecha_Detalle.obj");
+
 	/*---------------------------------------POSICIÓN Y ROTACIÓN DE PERSONAJES--------------------------------------------*/
 	glm::vec3 posNecro[] = {
 		glm::vec3(11.5f, 2.7f, -6.825f),
@@ -956,6 +960,18 @@ int main()
 		Portada.UseTexture();
 		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		meshList[0]->RenderMesh();
+
+		/*---------------------------------Flecha decorativa--------------------------------------*/
+		model = modelRot;
+		model = glm::translate(model, glm::vec3(-6.0f, 0.0f, -1.5f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Flecha_Detalle.RenderModel();
+
+		model = modelRot;
+		model = glm::translate(model, glm::vec3(4.0f, 0.0f, -1.5f));
+		model = glm::scale(model, glm::vec3(-1.0f, 1.0f, 1.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Flecha_Detalle.RenderModel();
 
 		/*---------------------------------------MUROS--------------------------------------------*/
 		//Perímetros
