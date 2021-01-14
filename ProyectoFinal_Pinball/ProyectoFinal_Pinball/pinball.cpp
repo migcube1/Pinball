@@ -45,7 +45,10 @@ const float toRadians = 3.14159265f / 180.0f;
 float movResorte;
 float movPosPalanca;
 float movPosResorte;
-float movCanica;
+float movCanicaR_x;
+float movCanicaR_y;
+float movCanicaR_z;
+float countAnimCanica;
 float movOffset;
 bool avanza;
 Window mainWindow;
@@ -104,6 +107,7 @@ Skybox skybox;
 
 //Declaración de la variables de tiempo
 GLfloat deltaTime = 0.0f;
+GLfloat deltaTime2 = 90.0f;
 GLfloat lastTime = 0.0f;
 
 // Vertex Shader
@@ -857,7 +861,9 @@ int main()
 	movResorte = 0.35f;
 	movPosResorte = 22.5;
 	movPosPalanca = 19.0;
-	movCanica = 15.5f;
+	movCanicaR_x = 13.5f;
+	movCanicaR_z = 15.5f;
+	countAnimCanica = 0.0f;
 
 	//Con el Offset se controlará la velocidad del resorte
 	movOffset = 1.5f;
@@ -865,6 +871,84 @@ int main()
 	//Loop mientras no se cierra la ventana
 	while (!mainWindow.getShouldClose())
 	{
+		/*-------------------------------------------------------------------------------------------*/
+		/*---------------------------------ANIMACIÓN SENCILLA----------------------------------------*/
+		/*-------------------------------------------------------------------------------------------*/
+		GLfloat now = glfwGetTime();
+		deltaTime = now - lastTime;
+		lastTime = now;
+
+		//Animación sencilla del resorte
+		if (mainWindow.getClic() == 1.0f)
+		{
+			//printf("\n%f", movPosPalanca);
+			if (movResorte < 1.275f)
+			{
+				movResorte += movOffset * deltaTime;
+				movPosResorte -= movOffset * deltaTime;
+				movPosPalanca += (movOffset * 3.5)* deltaTime;
+			}
+			avanza = 1;
+		}
+		else
+		{
+			movResorte = 0.425f;
+			movPosResorte = 20.075f;
+			movPosPalanca = 19.5f;
+		}
+		//Animación sencilla de una canica
+		if (avanza == 1)
+		{
+			if (movCanicaR_z < 18.5f && movCanicaR_x == 13.5f && countAnimCanica == 0.0f)
+			{
+				movCanicaR_z += movOffset * deltaTime * 3.0f;
+				printf("\n1 -> %f", movCanicaR_z);
+			}
+			else if (movCanicaR_z >= 18.5f && movCanicaR_x == 13.5f && countAnimCanica == 0.0f)
+			{
+				countAnimCanica = 1.0f;
+				printf("\n2 -> %f", movCanicaR_z);
+			}
+			else if (movCanicaR_z > -10.0f && movCanicaR_x == 13.5f && countAnimCanica == 1.0f)
+			{
+				movCanicaR_z -= movOffset * deltaTime * 7.0f;
+				printf("\n3 -> %f", movCanicaR_z);
+			}
+			else if (movCanicaR_z <= -10.0f && movCanicaR_x == 13.5f && countAnimCanica == 1.0f)
+			{
+				countAnimCanica = 2.0f;
+				printf("\n4 -> %f\n\t%f", movCanicaR_x, movCanicaR_z);
+			}
+			else if (movCanicaR_z > -12.5f  && countAnimCanica == 2.0f) //&& movCanicaR_x > 11.66f
+			{
+				movCanicaR_z -= movOffset * deltaTime * 7.0f;
+				movCanicaR_x -= movOffset * deltaTime * 1.5f;
+				printf("\n5 -> %f\n\t%f", movCanicaR_x, movCanicaR_z);
+			}
+			else if (movCanicaR_z <= -12.5f  && countAnimCanica == 2.0f)
+			{
+				countAnimCanica = 3.0f;
+				printf("\n6 -> %f\n\t%f", movCanicaR_x, movCanicaR_z);
+			}
+			else if (movCanicaR_z > -16.0f  && countAnimCanica == 3.0f)
+			{
+				movCanicaR_z -= movOffset * deltaTime * 7.0f;
+				movCanicaR_x -= movOffset * deltaTime * 3.0f;
+				printf("\n7 -> %f\n\t%f", movCanicaR_x, movCanicaR_z);
+			}
+			/*
+			else if (movCanicaR_z > -18.5f && movCanicaR_x > 3.5f && countAnimCanica == 2.0f)
+			{
+				deltaTime2 += 0.001845f;
+				movCanicaR_z -= movOffset * deltaTime * 7.0f;
+				//movCanicaR_x -= movOffset * deltaTime * 7.0f;
+				movCanicaR_x = 0.85f * movCanicaR_z + 21.4f;
+				printf("\n5 -> %f\n\t%f", movCanicaR_x, movCanicaR_z);
+			}
+			*/
+
+		}
+
 
 		
 		//Recibir eventos del usuario
@@ -1285,7 +1369,8 @@ int main()
 	
 		//Canica (1) con resorte asociado
 		model = modelRot;
-		model = glm::translate(model, glm::vec3(13.5f, 1.0f, movCanica));
+		
+		model = glm::translate(model, glm::vec3(movCanicaR_x, 1.0f, movCanicaR_z));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		metal.UseTexture();
 		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
@@ -1383,11 +1468,11 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Barra_Superior.RenderModel();
 
-		// Paletas
+		/*---------------------------------------PALETAS--------------------------------------------*/
+		
 		///Izquierda
 		model = modelTemp = modelRot;
-		//model = glm::translate(model, glm::vec3(-3.5f, 0.0f, 12.5f));
-		model = glm::translate(model, glm::vec3(-5.5f, 0.0f, 12.0f));
+		model = glm::translate(model, glm::vec3(-5.75f, 0.0f, 11.5f));
 		modelTemp = model = glm::rotate(model, -mainWindow.getPaletaL() * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 
 		model = modelTemp;
@@ -1395,16 +1480,24 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Paleta.RenderModel();
 
-
 		///Derecha
 		model = modelTemp = modelRot;
-		//model = glm::translate(model, glm::vec3(1.0f, 0.0f, 12.5f));
-		model = glm::translate(model, glm::vec3(3.0f, 0.0f, 12.0f));
+		model = glm::translate(model, glm::vec3(3.25f, 0.0f, 11.5f));
 		modelTemp = model = glm::rotate(model, mainWindow.getPaletaR() * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 
 		model = modelTemp;
 		model = glm::translate(model, glm::vec3(-2.25f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(-1.0f, 1.0f, 1.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Paleta.RenderModel();
+
+		///Central
+		model = modelTemp = modelRot;
+		model = glm::translate(model, glm::vec3(-4.0f, 0.0f, -4.0f));
+		modelTemp = model = glm::rotate(model, -mainWindow.getPaletaC() * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+
+		model = modelTemp;
+		model = glm::translate(model, glm::vec3(2.25f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Paleta.RenderModel();
 
@@ -1427,7 +1520,7 @@ int main()
 
 		//CAJA DERECHA
 		model = modelRot;
-		model = glm::translate(model, glm::vec3(7.0f, 1.0f, -17.0f));
+		model = glm::translate(model, glm::vec3(2.0f, 1.0f, -16.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		plainTexture.UseTexture();
 		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
@@ -1435,7 +1528,7 @@ int main()
 
 		//CAJA IZQUIERDA
 		model = modelRot;
-		model = glm::translate(model, glm::vec3(-7.0f, 1.0f, -17.0f));
+		model = glm::translate(model, glm::vec3(-3.0f, 1.0f, -16.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		plainTexture.UseTexture();
 		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
@@ -1443,38 +1536,11 @@ int main()
 
 		/*---------------------------------------RESORTE--------------------------------------------*/
 
-		GLfloat now = glfwGetTime();
-		deltaTime = now - lastTime;
-		lastTime = now;
+		
 		
 		model = modelRot;
-		if (mainWindow.getClic() == 1.0f)
-		{	
-			//printf("\n%f", movPosPalanca);
-			if (movResorte < 1.275f)
-			{
-				movResorte += movOffset * deltaTime;
-				movPosResorte -= movOffset* deltaTime;
-				movPosPalanca += (movOffset * 3.5)* deltaTime;
-
-				model = glm::translate(model, glm::vec3(13.5f, 1.0f, movPosResorte));
-				model = glm::scale(model, glm::vec3(1.0f, 1.0f, movResorte));
-			}
-			else
-			{
-				model = glm::translate(model, glm::vec3(13.5f, 1.0f, movPosResorte));
-				model = glm::scale(model, glm::vec3(1.0f, 1.0f, movResorte));
-			}			
-		}
-		else
-		{
-			movResorte = 0.425f;
-			movPosResorte = 20.075f;
-			movPosPalanca = 19.5f;
-			model = glm::translate(model, glm::vec3(13.5f, 1.0f, movPosResorte));
-			model = glm::scale(model, glm::vec3(1.0f, 1.0f, movResorte));
-		}
-
+		model = glm::translate(model, glm::vec3(13.5f, 1.0f, movPosResorte));
+		model = glm::scale(model, glm::vec3(1.0f, 1.0f, movResorte));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Resorte.RenderModel();
 

@@ -13,10 +13,12 @@ public:
 	GLfloat getBufferHeight() { return bufferHeight; }
 	GLfloat getXChange();
 	GLfloat getYChange();
+	GLfloat getMove() { return mover; }
 	GLfloat getmuevex() { return muevex; }
 	GLfloat getOnOff() { return OnOff; }
 	GLfloat getPaletaL() { return PaletaL; }
 	GLfloat getPaletaR() { return PaletaR; }
+	GLfloat getPaletaC() { return PaletaC; }
 	GLboolean getCamaraCanica() { return camaraCanica; }
 	GLfloat getClic() { return clic; }
 	bool getShouldClose() {
@@ -24,6 +26,9 @@ public:
 	bool* getsKeys() { return keys; }
 	void swapBuffers() { return glfwSwapBuffers(mainWindow); }
 	
+	//Reporte P11
+	GLfloat getActivar() { return activar; }
+
 	~Window();
 private: 
 	GLFWwindow *mainWindow;
@@ -36,9 +41,11 @@ private:
 	GLfloat xChange;
 	GLfloat yChange;
 	GLfloat muevex;
+	GLfloat mover;
 	GLfloat OnOff;
-	GLfloat PaletaL;
-	GLfloat PaletaR;
+	GLfloat PaletaL;	//Paleta Left
+	GLfloat PaletaR;	//Paleta Right
+	GLfloat PaletaC;	//Paleta Central
 	GLboolean camaraCanica;
 	GLfloat clic;
 	bool mouseFirstMoved;
@@ -46,5 +53,7 @@ private:
 	static void ManejaMouse(GLFWwindow* window, double xPos, double yPos);
 	static void BotonesMouse(GLFWwindow* window, int button, int action, int mods);
 
+	//Reporte P11
+	GLfloat activar;
 };
 

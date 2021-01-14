@@ -13,11 +13,14 @@ Window::Window(GLint windowWidth, GLint windowHeight)
 {
 	width = windowWidth;
 	height = windowHeight;
+	mover = 0.0f;
 	muevex = 2.0f;
 	OnOff = 0.0f; //Off
+	activar = 0.0f;
 	camaraCanica = GL_FALSE; //Camara de la canica desactivada
 	PaletaL = 25.0f; //Desactivada
 	PaletaR = 25.0f; //Desactivada
+	PaletaC = 25.0f; //Desactivada
 	clic = 0.0f; //Desactivado
 	for (size_t i = 0; i < 1024; i++)
 	{
@@ -110,6 +113,14 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 	{
 		glfwSetWindowShouldClose(window, GL_TRUE);
 	}
+	//Para mover molino
+	if (key == GLFW_KEY_G)
+	{
+		if (theWindow->mover < 360.0f)
+			theWindow->mover += 1.0f;
+		else
+			theWindow->mover = 0.0f;
+	}
 	if (key == GLFW_KEY_Y)
 	{
 		theWindow-> muevex += 1.0;
@@ -141,6 +152,13 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 	else if (action == GLFW_RELEASE && key == GLFW_KEY_X) {
 		theWindow->PaletaR = 25.0f;
 	}
+	if (action == GLFW_PRESS && key == GLFW_KEY_Q)
+	{
+		theWindow->PaletaC = -15.0f;
+	}
+	else if (action == GLFW_RELEASE && key == GLFW_KEY_Q) {
+		theWindow->PaletaC = 25.0f;
+	}
 	
 
 	//Cambio de camara de la canica
@@ -151,19 +169,26 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 		theWindow->camaraCanica = GL_TRUE;  //Activamos la camara de la canica
 	}
 
-
+	//Reporte P11
+	if (action == GLFW_PRESS && key == GLFW_KEY_SPACE && theWindow->activar == 1.0)
+	{
+		theWindow->activar = 0.0;
+	}
+	else if (action == GLFW_PRESS && key == GLFW_KEY_SPACE && theWindow->activar == 0.0) {
+		theWindow->activar = 1.0;
+	}
 
 	if (key >= 0 && key < 1024)
 	{
 		if (action == GLFW_PRESS)
 		{
 			theWindow->keys[key] = true;
-			printf("se presiono la tecla %d'\n", key);
+			//printf("se presiono la tecla %d'\n", key);
 		}
 		else if (action == GLFW_RELEASE)
 		{
 			theWindow->keys[key] = false;
-			printf("se solto la tecla %d'\n", key);
+			//printf("se solto la tecla %d'\n", key);
 		}
 	}
 }
@@ -175,7 +200,7 @@ void Window::BotonesMouse(GLFWwindow* window, int button, int action, int mods)
 	if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
 	{	
 		theWindow->clic = 1.0f;
-		printf("se presiono clic \n");
+		//printf("se presiono clic \n");
 	}
 	else 
 	{
