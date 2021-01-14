@@ -21,6 +21,7 @@ del proyecto.
 -------------------------------------------------
    Z            PALETA INFERIOR IZQUIERDA
    X            PALETA INFERIOR DERECHA
+   Q            PALETA DEL CENTRO
    C            CAMBIO DE CÁMARA
    P            ENCENDER Y APAGAR LUZ DE CÁMARA
-MOUSE DER	RESORTE
+MOUSE DER	      RESORTE
