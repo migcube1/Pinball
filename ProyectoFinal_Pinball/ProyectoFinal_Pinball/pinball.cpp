@@ -618,8 +618,8 @@ int main()
 	Barra_Inferior_Izq = Model();
 	Barra_Inferior_Izq.LoadModel("Models/barra_inferior_izq.obj");
 
-	Barra_Inferior_Der = Model();
-	Barra_Inferior_Der.LoadModel("Models/barra_inferior_der.obj");
+	//Barra_Inferior_Der = Model();
+	//Barra_Inferior_Der.LoadModel("Models/barra_inferior_der.obj");
 
 	Barra_Superior = Model();
 	Barra_Superior.LoadModel("Models/barra_superior.obj");
@@ -812,7 +812,7 @@ int main()
 
 	//LUZ DEL ILUMINA TABLERO
 	spotLights[9] = SpotLight(1.0f, 1.0f, 1.0f,	//Color
-		0.0f, 2.0f,								//Intensity
+		0.0f, 0.25f,								//Intensity
 		0.0f, 200.0f, 0.0f,						//Pos
 		0.0f, -1.0f, 0.0f,						//Dir
 		1.0f, 0.0f, 0.0f,						//con, lin, exp
@@ -1464,16 +1464,19 @@ int main()
 		// Barra lateral derecha
 		model = modelRot;
 		model = glm::translate(model, glm::vec3(8.0f, 1.0f, 6.0f));
-		model = glm::rotate(model, -135 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		//model = glm::rotate(model, -135 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, 50.0f * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(-1.0f, 1.0f, 1.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		plainTexture.UseTexture();
 		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		Barra_Lateral_Der.RenderModel();
+		Barra_Lateral_Izq.RenderModel();
+		//Barra_Lateral_Der.RenderModel();
 
 
 		// Barra inferior izquierda
 		model = modelRot;
-		model = glm::translate(model, glm::vec3(-6.5f, 1.0f, 4.0f));
+		model = glm::translate(model, glm::vec3(-6.5f, 1.0f, 3.5f));
 		model = glm::rotate(model, -50 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		plainTexture.UseTexture();
@@ -1482,7 +1485,7 @@ int main()
 
 		// Barra inferior derecha
 		model = modelRot;
-		model = glm::translate(model, glm::vec3(4.0f, 1.0f, 4.0f));
+		model = glm::translate(model, glm::vec3(4.0f, 1.0f, 3.5f));
 		//model = glm::rotate(model, -130 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(-1.0f, 1.0f, 1.0f));
 		model = glm::rotate(model, -50 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
