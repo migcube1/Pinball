@@ -810,18 +810,36 @@ int main()
 		15.0f);									//Edg
 	spotLightCount++;
 
-	////LUZ DEL ILUMINA TABLERO
-	//spotLights[9] = SpotLight(1.0f, 1.0f, 1.0f,	//Color
-	//	0.0f, 0.2f,								//Intensity
-	//	0.0f, 200.0f, 0.0f,						//Pos
-	//	0.0f, -1.0f, 0.0f,						//Dir
-	//	1.0f, 0.0f, 0.0f,						//con, lin, exp
-	//	20.0f);									//Edg
-	//spotLightCount++;
+	//LUZ DEL ILUMINA TABLERO
+	spotLights[9] = SpotLight(1.0f, 1.0f, 1.0f,	//Color
+		0.0f, 2.0f,								//Intensity
+		0.0f, 200.0f, 0.0f,						//Pos
+		0.0f, -1.0f, 0.0f,						//Dir
+		1.0f, 0.0f, 0.0f,						//con, lin, exp
+		20.0f);									//Edg
+	spotLightCount++;
+
+	//LUZ OBJETO
+	spotLights[10] = SpotLight(0.0f, 1.0f, 1.0f,	//Color
+		0.0f, 1.0f,								//Intensity
+		0.0f, 2.0f, -5.0f,						//Pos
+		-1.0f, 0.0f, 0.0f,						//Dir
+		1.0f, 0.0f, 0.0f,						//con, lin, exp
+		10.0f);									//Edg
+	spotLightCount++;
+
+	//LUZ OBJETO
+	spotLights[11] = SpotLight(0.0f, 1.0f, 1.0f,	//Color
+		0.0f, 1.0f,								//Intensity
+		0.0f, 2.0f, -5.0f,						//Pos
+		1.0f, 0.0f, 0.0f,						//Dir
+		1.0f, 0.0f, 0.0f,						//con, lin, exp
+		10.0f);									//Edg
+	spotLightCount++;
 
 
 	//LINTERNA
-	spotLights[9] = SpotLight(1.0f, 1.0f, 1.0f,	//Color
+	spotLights[12] = SpotLight(1.0f, 1.0f, 1.0f,	//Color
 		0.0f, 2.0f,								//Intensity
 		0.0f, 0.0f, 0.0f,						//Pos
 		0.0f, -1.0f, 0.0f,						//Dir
@@ -858,6 +876,7 @@ int main()
 		uniformSpecularIntensity = 0, uniformShininess = 0;
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 300.0f);
 
+	// Variables para la animación 
 	movResorte = 0.35f;
 	movPosResorte = 22.5;
 	movPosPalanca = 19.0;
@@ -979,15 +998,21 @@ int main()
 		uniformSpecularIntensity = shaderList[0].GetSpecularIntensityLocation();
 		uniformShininess = shaderList[0].GetShininessLocation();
 
+
+		/*-------------------------------------------------------------------------------------------*/
+		/*-------------------------------- CONTROL DE LUCES -----------------------------------------*/
+		/*-------------------------------------------------------------------------------------------*/
+
 		//Asociamos la cámara con la luz de la linterna
 		glm::vec3 lowerLight = camera.getCameraPosition();
 		lowerLight.y -= 0.3f;
-		spotLights[9].SetFlash(lowerLight, camera.getCameraDirection());
+		spotLights[12].SetFlash(lowerLight, camera.getCameraDirection());
 
 		//Cargamos la luces al shader
 		shaderList[0].SetDirectionalLight(&mainLight);
 		shaderList[0].SetPointLights(pointLights, pointLightCount);
 		shaderList[0].SetSpotLights(spotLights, spotLightCount);
+
 
 		//Control de las luces verdes, rojas y amarillas 
 		if (iCount > 5) { iCount = 0; }
@@ -1008,13 +1033,40 @@ int main()
 		spotLights[8].SetPos(posLucesRY_Right[iCount]);
 		iCount += 1;
 
-		//Pender y apagar la linterna (P)
+		//Control para encender/apagar la linterna (P)
 		if (mainWindow.getOnOff() == 1.0) {
 			shaderList[0].SetSpotLights(spotLights, spotLightCount);
 		}
 		else {
 			shaderList[0].SetSpotLights(spotLights, spotLightCount - 1);
 		}
+
+		//Control para encender/apagar la luz de las paletas (O)
+		if (mainWindow.getOnOff_lpaletas() == 0.0) {  ///LUZ APAGADA
+			spotLights[0].SetEdge(0.0f);
+		}
+		else {
+			spotLights[0].SetEdge(20.0f); ///LUZ ENCENDIDA
+		}
+
+		//Control para encender/apagar la luz del tablero (I)
+		if (mainWindow.getOnOff_ltablero() == 0.0) {  ///LUZ APAGADA
+			spotLights[9].SetEdge(0.0f);
+		}
+		else {
+			spotLights[9].SetEdge(20.0f); ///LUZ ENCENDIDA
+		}
+
+		//Control para encender/apagar la luz del objeto (U)
+		if (mainWindow.getOnOff_lobjeto() == 0.0) {  ///LUZ APAGADA
+			spotLights[10].SetEdge(0.0f);
+			spotLights[11].SetEdge(0.0f);
+		}
+		else {
+			spotLights[10].SetEdge(20.0f); ///LUZ ENCENDIDA
+			spotLights[11].SetEdge(20.0f);
+		}
+
 
 		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
 

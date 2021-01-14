@@ -51,6 +51,12 @@ void SpotLight::SetPos(glm::vec3 pos)
 	position = pos;
 }
 
+void SpotLight::SetEdge(GLfloat edg) 
+{
+	edge = edg;
+	procEdge = cosf(glm::radians(edge));
+}
+
 SpotLight::~SpotLight()
 {
 }

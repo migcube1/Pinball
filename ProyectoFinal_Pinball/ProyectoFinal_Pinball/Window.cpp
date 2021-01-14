@@ -16,6 +16,9 @@ Window::Window(GLint windowWidth, GLint windowHeight)
 	mover = 0.0f;
 	muevex = 2.0f;
 	OnOff = 0.0f; //Off
+	OnOff_lpaletas = 1.0f; //On
+	OnOff_ltablero = 0.0f; //Off
+	OnOff_lobjeto = 1.0f; //On
 	activar = 0.0f;
 	camaraCanica = GL_FALSE; //Camara de la canica desactivada
 	PaletaL = 25.0f; //Desactivada
@@ -130,6 +133,8 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 		theWindow-> muevex -= 1.0;
 	}
 
+	// Encender/apagar luces
+	///Luz linterna
 	if (action == GLFW_PRESS && key == GLFW_KEY_P && theWindow->OnOff == 1.0)
 	{
 		theWindow->OnOff = 0.0;
@@ -138,6 +143,34 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 		theWindow->OnOff = 1.0;
 	}
 
+	/// Luz paletas
+	if (action == GLFW_PRESS && key == GLFW_KEY_O && theWindow->OnOff_lpaletas == 1.0)
+	{
+		theWindow->OnOff_lpaletas = 0.0;
+	}
+	else if (action == GLFW_PRESS && key == GLFW_KEY_O && theWindow->OnOff_lpaletas == 0.0) {
+		theWindow->OnOff_lpaletas = 1.0;
+	}
+
+	/// Luz tablero
+	if (action == GLFW_PRESS && key == GLFW_KEY_I && theWindow->OnOff_ltablero == 1.0)
+	{
+		theWindow->OnOff_ltablero = 0.0;
+	}
+	else if (action == GLFW_PRESS && key == GLFW_KEY_I && theWindow->OnOff_ltablero == 0.0) {
+		theWindow->OnOff_ltablero = 1.0;
+	}
+
+	/// Luz objeto
+	if (action == GLFW_PRESS && key == GLFW_KEY_U && theWindow->OnOff_lobjeto == 1.0)
+	{
+		theWindow->OnOff_lobjeto = 0.0;
+	}
+	else if (action == GLFW_PRESS && key == GLFW_KEY_U && theWindow->OnOff_lobjeto == 0.0) {
+		theWindow->OnOff_lobjeto = 1.0;
+	}
+
+	// Movimiento de las paletas
 	if (action == GLFW_PRESS && key == GLFW_KEY_Z)
 	{
 		theWindow->PaletaL = -15.0f;
@@ -152,20 +185,20 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 	else if (action == GLFW_RELEASE && key == GLFW_KEY_X) {
 		theWindow->PaletaR = 25.0f;
 	}
-	if (action == GLFW_PRESS && key == GLFW_KEY_Q)
+	if (action == GLFW_PRESS && key == GLFW_KEY_C)
 	{
 		theWindow->PaletaC = -15.0f;
 	}
-	else if (action == GLFW_RELEASE && key == GLFW_KEY_Q) {
+	else if (action == GLFW_RELEASE && key == GLFW_KEY_C) {
 		theWindow->PaletaC = 25.0f;
 	}
 	
 
 	//Cambio de camara de la canica
-	if (action == GLFW_PRESS && key == GLFW_KEY_C && theWindow->camaraCanica == GL_TRUE) {
+	if (action == GLFW_PRESS && key == GLFW_KEY_Q && theWindow->camaraCanica == GL_TRUE) {
 		theWindow->camaraCanica = GL_FALSE; //Desactivamos la camara  de la canica
 	}
-	else if (action == GLFW_PRESS && key == GLFW_KEY_C && theWindow->camaraCanica == GL_FALSE) {
+	else if (action == GLFW_PRESS && key == GLFW_KEY_Q && theWindow->camaraCanica == GL_FALSE) {
 		theWindow->camaraCanica = GL_TRUE;  //Activamos la camara de la canica
 	}
 

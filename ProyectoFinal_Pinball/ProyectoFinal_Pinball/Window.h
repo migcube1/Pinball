@@ -16,6 +16,9 @@ public:
 	GLfloat getMove() { return mover; }
 	GLfloat getmuevex() { return muevex; }
 	GLfloat getOnOff() { return OnOff; }
+	GLfloat getOnOff_lpaletas() { return OnOff_lpaletas; }
+	GLfloat getOnOff_ltablero() { return OnOff_ltablero; }
+	GLfloat getOnOff_lobjeto() { return OnOff_lobjeto; }
 	GLfloat getPaletaL() { return PaletaL; }
 	GLfloat getPaletaR() { return PaletaR; }
 	GLfloat getPaletaC() { return PaletaC; }
@@ -43,6 +46,9 @@ private:
 	GLfloat muevex;
 	GLfloat mover;
 	GLfloat OnOff;
+	GLfloat OnOff_lpaletas;
+	GLfloat OnOff_ltablero;
+	GLfloat OnOff_lobjeto;
 	GLfloat PaletaL;	//Paleta Left
 	GLfloat PaletaR;	//Paleta Right
 	GLfloat PaletaC;	//Paleta Central
