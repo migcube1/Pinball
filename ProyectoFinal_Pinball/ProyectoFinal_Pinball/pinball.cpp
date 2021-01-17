@@ -51,6 +51,7 @@ float movCanicaR_z;
 float countAnimCanica;
 float movOffset;
 bool avanza;
+float reproduciranimacion, habilitaranimacion, guardoFrame, reinicioFrame, ciclo, ciclo2, contador = 0;
 Window mainWindow;
 std::vector<Mesh*> meshList;
 std::vector<Shader> shaderList;
@@ -109,6 +110,10 @@ Skybox skybox;
 GLfloat deltaTime = 0.0f;
 GLfloat deltaTime2 = 90.0f;
 GLfloat lastTime = 0.0f;
+
+
+//void my_input(GLFWwindow *window);
+void inputKeyframes(bool* keys);
 
 // Vertex Shader
 static const char* vShader = "shaders/shader_light.vert";
@@ -549,6 +554,117 @@ void CreateShaders()
 	shaderList.push_back(*shader1);
 }
 
+//////////////////////////////KEYFRAMES/////////////////////
+
+
+bool animacion = false;
+
+//NEW// Keyframes
+//float posXCanica = -1.0f, posYCanica = 1.0, posZCanica = 2.0f;   //Posición inicial del helicoptero
+float posXCanica = -1.0f, posYCanica = 1.0, posZCanica = 2.0f;   //Posición inicial del helicoptero
+float	movCanica_x = 0.0f, movCanica_y = 0.0f, movCanica_z = 0.0f;;
+float giroCanica = 0;
+
+#define MAX_FRAMES 30  //Numero maximo de cuadros a guardar (min 30 FPS)
+int i_max_steps = 90; //Valor maximo de interpolaciones entre KeyFrames
+int i_curr_steps = 5; //Cuantos KeyFrame  guardados actualmente
+
+typedef struct _frame
+{
+	//Variables para GUARDAR Key Frames
+	float movCanica_x;		//Variable para PosicionX
+	float movCanica_y;		//Variable para PosicionY
+	float movCanica_z;		//Variable para PosicionZ
+	float movCanica_xInc;		//Variable para IncrementoX
+	float movCanica_yInc;		//Variable para IncrementoY
+	float movCanica_zInc;		//Variable para IncrementoY
+	float giroCanica;
+	float giroCanicaInc;
+}FRAME;
+
+FRAME KeyFrame[MAX_FRAMES];
+int FrameIndex = 6;			//introducir datos
+bool play = false;
+int playIndex = 0;
+
+void saveFrame(void)
+{
+
+	printf("frameindex %d\n", FrameIndex);
+
+	KeyFrame[FrameIndex].movCanica_x = movCanica_x;
+	KeyFrame[FrameIndex].movCanica_y = movCanica_y;
+	KeyFrame[FrameIndex].movCanica_z = movCanica_z;
+	KeyFrame[FrameIndex].giroCanica;
+
+	FrameIndex++;
+}
+
+void resetElements(void)
+{
+
+	movCanica_x = KeyFrame[0].movCanica_x;
+	movCanica_y = KeyFrame[0].movCanica_y;
+	movCanica_z = KeyFrame[0].movCanica_z;
+	giroCanica = KeyFrame[0].giroCanica;
+}
+
+void interpolation(void)
+{
+	KeyFrame[playIndex].movCanica_xInc = (KeyFrame[playIndex + 1].movCanica_x - KeyFrame[playIndex].movCanica_x) / i_max_steps;
+	KeyFrame[playIndex].movCanica_yInc = (KeyFrame[playIndex + 1].movCanica_y - KeyFrame[playIndex].movCanica_y) / i_max_steps;
+	KeyFrame[playIndex].movCanica_zInc = (KeyFrame[playIndex + 1].movCanica_z - KeyFrame[playIndex].movCanica_z) / i_max_steps;
+	KeyFrame[playIndex].giroCanicaInc = (KeyFrame[playIndex + 1].giroCanica - KeyFrame[playIndex].giroCanica) / i_max_steps;
+
+}
+
+
+void animate(void)
+{
+	//Movimiento del objeto
+	if (play)
+	{
+		if (i_curr_steps >= i_max_steps) //end of animation between frames?
+		{
+			playIndex++;
+			printf("playindex : %d\n", playIndex);
+			printf("x %f\n", posXCanica + movCanica_x);
+			printf("y %f\n", posYCanica + movCanica_y);
+			printf("z %f\n", posZCanica + movCanica_z);
+			if (playIndex > FrameIndex - 2)	//end of total animation?
+			{
+				printf("Frame index= %d\n", FrameIndex);
+				printf("termina anim\n");
+				playIndex = 0;
+				play = false;
+			}
+			else //Next frame interpolations
+			{
+				//printf("entro aquí\n");
+				i_curr_steps = 0; //Reset counter
+				//Interpolation
+				interpolation();
+			}
+		}
+		else
+		{
+			//printf("se quedó aqui\n");
+			//printf("max steps: %f", i_max_steps);
+			//Draw animation
+			movCanica_x += KeyFrame[playIndex].movCanica_xInc;
+			movCanica_y += KeyFrame[playIndex].movCanica_yInc;
+			movCanica_z += KeyFrame[playIndex].movCanica_zInc;
+			giroCanica += KeyFrame[playIndex].giroCanicaInc;
+			i_curr_steps++;
+		}
+
+	}
+}
+
+/* FIN KEYFRAMES*/
+
+
+
 int main()
 {
 	mainWindow = Window(1366, 768); // 1280, 1024 or 1024, 768
@@ -876,6 +992,68 @@ int main()
 		uniformSpecularIntensity = 0, uniformShininess = 0;
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 300.0f);
 
+	//KEYFRAMES DECLARADOS INICIALES
+
+	KeyFrame[0].movCanica_x = 0.0f;
+	KeyFrame[0].movCanica_y = 0.0f;
+	KeyFrame[0].movCanica_z = 0.0f;
+	KeyFrame[0].giroCanica = 0;
+
+
+	KeyFrame[1].movCanica_x = -2.5f;
+	KeyFrame[1].movCanica_y = 0.0f;
+	KeyFrame[1].movCanica_z = 4.0f;
+	KeyFrame[1].giroCanica = 0;
+
+	KeyFrame[2].movCanica_x = 2.0f;
+	KeyFrame[2].movCanica_y = 0.0f;
+	KeyFrame[2].movCanica_z = 4.0f;
+	KeyFrame[2].giroCanica = 0;
+
+	KeyFrame[3].movCanica_x = 2.0f;
+	KeyFrame[3].movCanica_y = 0.0f;
+	KeyFrame[3].movCanica_z = -16.0f;
+	KeyFrame[3].giroCanica = 0;
+
+	KeyFrame[4].movCanica_x = 2.0f;
+	KeyFrame[4].movCanica_y = 0.0f;
+	KeyFrame[4].movCanica_z = 4.0f;
+	KeyFrame[4].giroCanica = 0;
+
+	KeyFrame[5].movCanica_x = 0.0f;
+	KeyFrame[5].movCanica_y = 0.0f;
+	KeyFrame[5].movCanica_z = 0.0f;
+	KeyFrame[5].giroCanica = 0;
+
+
+	/*
+	KeyFrame[2].movCanica_x = .0f;
+	KeyFrame[2].movCanica_y = 0.0f;
+	KeyFrame[2].movCanica_z = 10.0f;
+	KeyFrame[2].giroCanica = 0;*/
+
+
+
+	//KeyFrame[2].movCanica_x = 2.0f;
+	//KeyFrame[2].movCanica_y = 0.0f;
+	//KeyFrame[2].movCanica_z = 2.0f;
+	//KeyFrame[2].giroCanica = 0;
+
+	//KeyFrame[3].movCanica_x = 4.0f;
+	//KeyFrame[3].movCanica_y = 0.0f;
+	//KeyFrame[3].movCanica_z = 4.0f;
+	//KeyFrame[3].giroCanica = 0;
+
+	//KeyFrame[4].movCanica_x = 4.0f;
+	//KeyFrame[4].movCanica_y = 0.0f;
+	//KeyFrame[4].movCanica_z = 4.0f;
+	//KeyFrame[4].giroCanica = 0;
+
+
+
+
+	//Agregar Kefyrame[5] para que el avión regrese al inicio
+		
 	// Variables para la animación 
 	movResorte = 0.35f;
 	movPosResorte = 22.5;
@@ -972,6 +1150,9 @@ int main()
 		
 		//Recibir eventos del usuario
 		glfwPollEvents();
+		//para keyframes
+		inputKeyframes(mainWindow.getsKeys());
+		animate();
 
 		// Control de teclado para el cambio de cámara
 		if (mainWindow.getCamaraCanica() == GL_TRUE) {  //Camara de canica Activa
@@ -1430,7 +1611,7 @@ int main()
 
 		//Canica (2) con animación asociada
 		model = modelRot;
-		model = glm::translate(model, glm::vec3(0.0f, 1.0f, -13.0f));
+		model = glm::translate(model, glm::vec3(posXCanica + movCanica_x, posYCanica + movCanica_y, posZCanica + movCanica_z));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		metal.UseTexture();
 		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
@@ -1614,4 +1795,82 @@ int main()
 	}
 
 	return 0;
+}
+
+
+void inputKeyframes(bool* keys)
+{
+	if (keys[GLFW_KEY_SPACE])
+	{
+		if (reproduciranimacion < 1)
+		{
+			if (play == false && (FrameIndex > 1))
+			{
+				resetElements();
+				//First Interpolation				
+				interpolation();
+				play = true;
+				playIndex = 0;
+				i_curr_steps = 0;
+				reproduciranimacion++;
+				printf("presiona 0 para habilitar reproducir de nuevo la animación'\n");
+				habilitaranimacion = 0;
+
+			}
+			else
+			{
+				play = false;
+			}
+		}
+	}
+	if (keys[GLFW_KEY_0])
+	{
+		if (habilitaranimacion < 1)
+		{
+			reproduciranimacion = 0;
+		}
+	}
+
+	if (keys[GLFW_KEY_L])
+	{
+		if (guardoFrame < 1)
+		{
+			saveFrame();
+			printf("movAvion_x es: %f\n", movCanica_x);
+			//printf("movAvion_y es: %f\n", movAvion_y);
+			printf("presiona P para habilitar guardar otro frame'\n");
+			guardoFrame++;
+			reinicioFrame = 0;
+		}
+	}
+	if (keys[GLFW_KEY_P])
+	{
+		if (reinicioFrame < 1)
+		{
+			guardoFrame = 0;
+		}
+	}
+
+
+	if (keys[GLFW_KEY_1])
+	{
+		if (ciclo < 1)
+		{
+			//printf("movAvion_x es: %f\n", movAvion_x);
+			movCanica_x += 1.0f;
+			printf("movAvion_x es: %f\n", movCanica_x);
+			ciclo++;
+			ciclo2 = 0;
+			printf("reinicia con 2\n");
+		}
+
+	}
+	if (keys[GLFW_KEY_2])
+	{
+		if (ciclo2 < 1)
+		{
+			ciclo = 0;
+		}
+	}
+
 }
