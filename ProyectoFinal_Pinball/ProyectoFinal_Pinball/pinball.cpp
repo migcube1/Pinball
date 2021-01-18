@@ -1099,186 +1099,151 @@ int main()
 			if (movCanicaR_x < 13.5f  && countAnimCanica == -2.0f)
 			{
 				movCanicaR_x += movOffset * deltaTime * 0.5f;
-				printf("\n-2 -> %f", movCanicaR_z);
 			}
 			else if (movCanicaR_x >= 13.5f && countAnimCanica == -2.0f)
 			{
 				countAnimCanica = -1.0f;
-				printf("\n-2 -> %f", movCanicaR_z);
 			}
-
 			else if (movCanicaR_z > 15.5f  && countAnimCanica == -1.0f)
 			{
 				movCanicaR_z -= movOffset * deltaTime * 5.0f;
-				printf("\n-1 -> %f", movCanicaR_z);
 			}
 			else if (movCanicaR_z <= 15.5f && countAnimCanica == -1.0f)
 			{
 				countAnimCanica = 0.0f;
 				movCanicaR_x = 13.5;
-				printf("\n-1 -> %f", movCanicaR_z);
 			}
 			else if (movCanicaR_z < 18.5f && movCanicaR_x == 13.5f && countAnimCanica == 0.0f)
 			{
 				movCanicaR_z += movOffset * deltaTime * 3.0f;
-				printf("\n1 -> %f", movCanicaR_z);
 			}
 			else if (movCanicaR_z >= 18.5f && movCanicaR_x == 13.5f && countAnimCanica == 0.0f)
 			{
 				countAnimCanica = 1.0f;
-				printf("\n2 -> %f", movCanicaR_z);
 			}
 			else if (movCanicaR_z > -10.0f && movCanicaR_x == 13.5f && countAnimCanica == 1.0f)
 			{
 				movCanicaR_z -= movOffset * deltaTime * 7.0f;
-				printf("\n3 -> %f", movCanicaR_z);
 			}
 			else if (movCanicaR_z <= -10.0f && movCanicaR_x == 13.5f && countAnimCanica == 1.0f)
 			{
 				countAnimCanica = 2.0f;
-				printf("\n4 -> %f\n\t%f", movCanicaR_x, movCanicaR_z);
 			}
 			else if (movCanicaR_z > -12.5f  && countAnimCanica == 2.0f)
 			{
 				movCanicaR_z -= movOffset * deltaTime * 7.0f;
 				movCanicaR_x -= movOffset * deltaTime * 1.5f;
-				printf("\n5 -> %f\n\t%f", movCanicaR_x, movCanicaR_z);
 			}
 			else if (movCanicaR_z <= -12.5f  && countAnimCanica == 2.0f)
 			{
 				countAnimCanica = 3.0f;
-				printf("\n6 -> %f\n\t%f", movCanicaR_x, movCanicaR_z);
 			}
 			else if (movCanicaR_z > -16.0f  && countAnimCanica == 3.0f)
 			{
 				movCanicaR_z -= movOffset * deltaTime * 7.0f;
 				movCanicaR_x -= movOffset * deltaTime * 3.0f;
-				printf("\n7 -> %f\n\t%f", movCanicaR_x, movCanicaR_z);
 			}
 			else if (movCanicaR_z <= -16.0f  && countAnimCanica == 3.0f)
 			{
 				countAnimCanica = 4.0f;
-				printf("\n8 -> %f\n\t%f", movCanicaR_x, movCanicaR_z);
 			}
 			else if (movCanicaR_z > -18.5f  && countAnimCanica == 4.0f)
 			{
 				movCanicaR_z -= movOffset * deltaTime * 3.0f;
 				movCanicaR_x -= movOffset * deltaTime * 7.0f;
-				printf("\n9 -> %f\n\t%f", movCanicaR_x, movCanicaR_z);
 			}
 			else if (movCanicaR_z <= -18.5f  && countAnimCanica == 4.0f)
 			{
 				countAnimCanica = 5.0f;
-				printf("\n10 -> %f\n\t%f", movCanicaR_x, movCanicaR_z);
 			}
 			else if (movCanicaR_x > 3.0f  && countAnimCanica == 5.0f)
 			{
 				movCanicaR_x -= movOffset * deltaTime * 7.0f;
-				printf("\n11 -> %f\n\t%f", movCanicaR_x, movCanicaR_z);
 			}
 			else if (movCanicaR_x <= 3.0f  && countAnimCanica == 5.0f)
 			{
 				countAnimCanica = 6.0f;
-				printf("\n12 -> %f\n\t%f", movCanicaR_x, movCanicaR_z);
 			}
 			else if (movCanicaR_z < -14.25f  && countAnimCanica == 6.0f)
 			{
 				movCanicaR_z += movOffset * deltaTime * 7.0f;
 				movCanicaR_x += movOffset * deltaTime * 4.0f;
-				printf("\n13 -> %f\n\t%f", movCanicaR_x, movCanicaR_z);
 			}
 			else if (movCanicaR_z >= -14.25f  && countAnimCanica == 6.0f)
 			{
 				countAnimCanica = 7.0f;
-				printf("\n14 -> %f\n\t%f", movCanicaR_x, movCanicaR_z);
 			}
 			else if (movCanicaR_x > -5.75f  && countAnimCanica == 7.0f)
 			{
 				movCanicaR_z += movOffset * deltaTime * 4.0f;
 				movCanicaR_x -= movOffset * deltaTime * 7.0f;
-				printf("\n15 -> %f\n\t%f", movCanicaR_x, movCanicaR_z);
 			}
 			else if (movCanicaR_x <= -5.75f  && countAnimCanica == 7.0f)
 			{
 				countAnimCanica = 8.0f;
-				printf("\n16 -> %f\n\t%f", movCanicaR_x, movCanicaR_z);
 			}
 			else if (movCanicaR_z > -11.25f  && countAnimCanica == 8.0f)
 			{
 				movCanicaR_z -= movOffset * deltaTime * 7.0f;
 				movCanicaR_x -= movOffset * deltaTime * 4.75f;
-				printf("\n17 -> %f\n\t%f", movCanicaR_x, movCanicaR_z);
 			}
 			else if (movCanicaR_z <= -11.25f  && countAnimCanica == 8.0f)
 			{
 				countAnimCanica = 9.0f;
-				printf("\n18 -> %f\n\t%f", movCanicaR_x, movCanicaR_z);
 			}
 			else if (movCanicaR_x > -13.00f  && countAnimCanica == 9.0f)
 			{
 				movCanicaR_z += movOffset * deltaTime * 7.0f;
 				movCanicaR_x -= movOffset * deltaTime * 6.0f;
-				printf("\n19 -> %f\n\t%f", movCanicaR_x, movCanicaR_z);
 			}
 			else if (movCanicaR_x <= -13.0f  && countAnimCanica == 9.0f)
 			{
 				countAnimCanica = 10.0f;
-				printf("\n20 -> %f\n\t%f", movCanicaR_x, movCanicaR_z);
 			}
 			else if (movCanicaR_x < -3.0f  && countAnimCanica == 10.0f)
 			{
 				movCanicaR_z += movOffset * deltaTime * 4.0f;
 				movCanicaR_x += movOffset * deltaTime * 7.0f;
-				printf("\n21 -> %f\n\t%f", movCanicaR_x, movCanicaR_z);
 			}
 			else if (movCanicaR_x >= -3.0f  && countAnimCanica == 10.0f)
 			{
 				countAnimCanica = 11.0f;
-				printf("\n22 -> %f\n\t%f", movCanicaR_x, movCanicaR_z);
 			}
 			else if (movCanicaR_x > -4.5f  && countAnimCanica == 11.0f)
 			{
 				movCanicaR_z += movOffset * deltaTime * 7.0f;
 				movCanicaR_x -= movOffset * deltaTime * 4.0f;
-				printf("\n23 -> %f\n\t%f", movCanicaR_x, movCanicaR_z);
 			}
 			else if (movCanicaR_x <= -4.5f  && countAnimCanica == 11.0f)
 			{
 				countAnimCanica = 12.0f;
-				printf("\n24 -> %f\n\t%f", movCanicaR_x, movCanicaR_z);
 			}
 			else if (movCanicaR_x < -2.55f  && countAnimCanica == 12.0f)
 			{
 				movCanicaR_z -= movOffset * deltaTime * 4.0f;
 				movCanicaR_x += movOffset * deltaTime * 7.0f;
-				printf("\n25 -> %f\n\t%f", movCanicaR_x, movCanicaR_z);
 			}
 			else if (movCanicaR_x >= -2.55f  && countAnimCanica == 12.0f)
 			{
 				countAnimCanica = 13.0f;
-				printf("\n26 -> %f\n\t%f", movCanicaR_x, movCanicaR_z);
 			}
 			else if (movCanicaR_z < 18.8f  && countAnimCanica == 13.0f)
 			{
 				movCanicaR_z += movOffset * deltaTime * 7.0f;
 				movCanicaR_x += movOffset * deltaTime * 0.85f;
-				printf("\n27 -> %f\n\t%f", movCanicaR_x, movCanicaR_z);
 			}
 			else if (movCanicaR_x <= 18.8f   && countAnimCanica == 13.0f)
 			{
 				countAnimCanica = 14.0f;
-				printf("\n28 -> %f\n\t%f", movCanicaR_x, movCanicaR_z);
 			}
 			else if (movCanicaR_x < 11.5f  && countAnimCanica == 14.0f)
 			{
 				movCanicaR_x += movOffset * deltaTime * 6.0f;
-				printf("\n29 -> %f\n\t%f", movCanicaR_x, movCanicaR_z);
 			}
 			else if (movCanicaR_x < 13.5f   && countAnimCanica == 14.0f)
 			{
 				countAnimCanica = -2.0f;
 				avanza = 0;							//Fin de la animación
-				printf("\n30 -> %f\n\t%f", movCanicaR_x, movCanicaR_z);
 			}
 		}
 
